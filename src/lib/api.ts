@@ -9,3 +9,16 @@ export const getArtists = async (): Promise<any> => {
 
   return reponse;
 };
+
+export const getArtistByName = async (name: string): Promise<any> => {
+  const response = await ContentStack.contentType("artist")
+    .entry()
+    .query({ query: { name: name } })
+    .find();
+
+  if (!response) {
+    throw new Error(`Failed to fetch artist with name: ${name}`);
+  }
+
+  return response;
+};
