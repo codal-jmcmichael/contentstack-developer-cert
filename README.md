@@ -1,32 +1,36 @@
-[![Contentstack Logo](/public/contentstack-readme-logo.png)](https://www.contentstack.com/)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Getting Started
 
-# Build a Starter Website with Next.js and Contentstack
+First, run the development server:
 
-About Contentstack: Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-About this project: Next.js is a minimalistic framework for server-rendered React applications.This guide will help you create a starter website built on top of Next.js with minimal steps.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-![Contentstack-Nextjs-starter-app](/public/starter-app.png)
+## Learn More
 
-## Live Demo
+To learn more about Next.js, take a look at the following resources:
 
-You can check the [live demo](https://contentstack-nextjs-starter-app.vercel.app) to get first-hand experience of the website.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Tutorial
+## Deploy on Vercel
 
-We have created an in-depth tutorial on how you can create a Next.js starter website using Contentstack's Node.js SDK and its fetch content from Contentstack.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-[Build Website using Next.js and Contentstack](https://www.contentstack.com/docs/developers/sample-apps/build-a-starter-website-using-next-js-and-contentstack/)
-
-
-**More Resources**
-
-Read Contentstack [docs](https://www.contentstack.com/docs/)
-
-Region support [docs](https://www.contentstack.com/docs/developers/selecting-region-in-contentstack-starter-apps)
-
-Learn about [Next.js](https://learnnextjs.com/)
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
