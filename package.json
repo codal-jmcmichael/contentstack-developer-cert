@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack && cs:generate-types",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts'"
   },
   "dependencies": {
     "@contentstack/delivery-sdk": "^4.8.0",
