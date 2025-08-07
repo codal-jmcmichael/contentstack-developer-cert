@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import parse from "html-react-parser";
-import Skeleton from "react-loading-skeleton";
-import { Entry, FooterProps, Links } from "../typescript/layout";
-import { getFooterRes } from "../helper";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import parse from 'html-react-parser';
+import { onEntryChange } from '../contentstack-sdk';
+import { getFooterRes } from '../helper';
+import Skeleton from 'react-loading-skeleton';
+import { FooterProps, Entry, Links } from "../typescript/layout";
 
-export default function Footer({
-  footer,
-  entries,
-}: {
-  footer: FooterProps;
-  entries: Entry;
-}) {
+export default function Footer({ footer, entries }: {footer: FooterProps, entries: Entry}) {
+
   const [getFooter, setFooter] = useState(footer);
-
+  
   function buildNavigation(ent: Entry, ft: FooterProps) {
     let newFooter = { ...ft };
     if (ent.length !== newFooter.navigation.link.length) {
@@ -46,41 +42,42 @@ export default function Footer({
   }
 
   useEffect(() => {
-    fetchData();
+    onEntryChange(() => fetchData());
   }, [footer]);
 
   const footerData = getFooter ? getFooter : undefined;
+
   return (
     <footer>
-      <div className="max-width footer-div">
-        <div className="col-quarter">
+      <div className='max-width footer-div'>
+        <div className='col-quarter'>
           {footerData && footerData.logo ? (
-            <Link href="/" className="logo-tag">
+            (<Link href='/' className='logo-tag'>
+
               <img
                 src={footerData.logo.url}
                 alt={footerData.title}
                 title={footerData.title}
-                {...(footer.logo.$?.url as {})}
-                className="logo footer-logo"
+                {...footer.logo.$?.url as {}}
+                className='logo footer-logo'
               />
-            </Link>
+
+            </Link>)
           ) : (
             <Skeleton width={150} />
           )}
         </div>
-        <div className="col-half">
+        <div className='col-half'>
           <nav>
-            <ul className="nav-ul">
+            <ul className='nav-ul'>
               {footerData ? (
                 footerData.navigation.link.map((menu) => (
                   <li
-                    className="footer-nav-li"
+                    className='footer-nav-li'
                     key={menu.title}
                     {...menu.$?.title}
                   >
-                    <Link href={menu.href} legacyBehavior>
-                      {menu.title}
-                    </Link>
+                    <Link href={menu.href} legacyBehavior>{menu.title}</Link>
                   </li>
                 ))
               ) : (
@@ -89,8 +86,8 @@ export default function Footer({
             </ul>
           </nav>
         </div>
-        <div className="col-quarter social-link">
-          <div className="social-nav">
+        <div className='col-quarter social-link'>
+          <div className='social-nav'>
             {footerData ? (
               footerData.social?.social_share.map((social) => (
                 <a
@@ -102,7 +99,7 @@ export default function Footer({
                     <img
                       src={social.icon.url}
                       alt={social.link.title}
-                      {...(social.icon.$?.url as {})}
+                      {...social.icon.$?.url as {}}
                     />
                   )}
                 </a>
@@ -113,12 +110,12 @@ export default function Footer({
           </div>
         </div>
       </div>
-      {footerData && typeof footerData.copyright === "string" ? (
-        <div className="copyright" {...(footer.$?.copyright as {})}>
+      {footerData && typeof footerData.copyright === 'string' ? (
+        <div className='copyright' {...footer.$?.copyright as {}}>
           {parse(footerData.copyright)}
         </div>
       ) : (
-        <div className="copyright">
+        <div className='copyright'>
           <Skeleton width={500} />
         </div>
       )}
