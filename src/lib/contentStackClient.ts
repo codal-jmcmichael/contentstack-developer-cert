@@ -1,31 +1,32 @@
-import contentstack from "@contentstack/delivery-sdk";
+import contentstack, { StackConfig } from "@contentstack/delivery-sdk";
 
-const apiKey = process.env.CONTENTSTACK_API_KEY;
-const deliveryToken = process.env.CONTENTSTACK_DELIVERY_TOKEN;
-const environment = process.env.CONTENTSTACK_ENVIRONMENT;
+const requiredEnvVars = [
+  "CONTENTSTACK_API_KEY",
+  "CONTENTSTACK_DELIVERY_TOKEN",
+  "CONTENTSTACK_ENVIRONMENT",
+  "CONTENTSTACK_PREVIEW_TOKEN",
+  "CONTENTSTACK_PREVIEW_HOST",
+];
 
-if (!apiKey) {
-  throw new Error(
-    "CONTENTSTACK_API_KEY is not defined in environment variables."
-  );
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    throw new Error(
+      `Error: Missing required environment variable "${envVar}". Please check your .env.local file.`
+    );
+  }
 }
 
-if (!deliveryToken) {
-  throw new Error(
-    "CONTENTSTACK_DELIVERY_TOKEN is not defined in environment variables."
-  );
-}
+const stackOptions: StackConfig = {
+  apiKey: process.env.CONTENTSTACK_API_KEY!,
+  deliveryToken: process.env.CONTENTSTACK_DELIVERY_TOKEN!,
+  environment: process.env.CONTENTSTACK_ENVIRONMENT!,
+  branch: process.env.CONTENTSTACK_BRANCH || "main",
+  live_preview: {
+    enable: process.env.CONTENTSTACK_LIVE_PREVIEW === "true",
+    host: process.env.CONTENTSTACK_PREVIEW_HOST!,
+    preview_token: process.env.CONTENTSTACK_PREVIEW_TOKEN!,
+  },
+};
 
-if (!environment) {
-  throw new Error(
-    "CONTENTSTACK_ENVIRONMENT is not defined in environment variables."
-  );
-}
-
-const ContentStack = contentstack.stack({
-  apiKey,
-  deliveryToken,
-  environment,
-});
-
+const ContentStack = contentstack.stack(stackOptions);
 export default ContentStack;

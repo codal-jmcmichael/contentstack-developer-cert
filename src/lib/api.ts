@@ -1,30 +1,37 @@
 import ContentStack from "@/lib/contentStackClient";
 import type { Artist } from "@/types/contentStack/generated";
-import { FindResponse } from "@contentstack/delivery-sdk";
+import { BaseEntry } from "@contentstack/delivery-sdk";
 
-export const getArtists = async (): Promise<FindResponse<Artist[]>> => {
-  const reponse = await ContentStack.contentType("artist")
+export type ArtistWithMetadata = Artist & BaseEntry;
+
+export const getArtists = async (): Promise<ArtistWithMetadata[]> => {
+  const response = await ContentStack.contentType("artist")
     .entry()
-    .find<Artist[]>();
+    .includeMetadata()
+    .find<ArtistWithMetadata>();
 
-  if (!reponse) {
-    throw new Error("Failed to fetch artists");
+  const artists = response?.entries;
+
+  if (!artists || !artists.length) {
+    throw new Error("No artists found.");
   }
 
-  return reponse;
+  return artists;
 };
 
 export const getArtistByName = async (
   name: string
-): Promise<FindResponse<Artist>> => {
+): Promise<ArtistWithMetadata> => {
   const response = await ContentStack.contentType("artist")
     .entry()
     .query({ query: { name: name } })
-    .find<Artist>();
+    .find<ArtistWithMetadata>();
 
-  if (!response) {
-    throw new Error(`Failed to fetch artist with name: ${name}`);
+  const artist = response?.entries?.[0];
+
+  if (!artist) {
+    throw new Error(`Artist with name "${name}" not found.`);
   }
 
-  return response;
+  return artist;
 };
