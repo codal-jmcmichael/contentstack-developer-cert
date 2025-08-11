@@ -1,5 +1,9 @@
 import contentstack, { StackConfig } from "@contentstack/delivery-sdk";
 
+/*
+ * Ensure that all required environment variables are set.
+ * This helps prevent runtime errors due to missing configuration.
+ */
 const requiredEnvVars = [
   "CONTENTSTACK_API_KEY",
   "CONTENTSTACK_DELIVERY_TOKEN",

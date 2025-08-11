@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Codal ContentStack Exercise
 
-## Getting Started
+## Guidelines
 
-First, run the development server:
+Use ContentStack to express relational data between content types and render them on the frontend in a mock exercise.
+
+Create the following content types:
+
+1. Song
+   - Title
+   - Slug (unique song identifier)
+   - Description
+   - Lyrics (body)
+   - Album Art (featured image)
+   - Artist (reference to Artist content type)
+   - Genres (tags)
+   - Release Date (published date)
+   - Is Single (is featured)
+2. Artist
+   - Name
+   - Bio
+   - Photo (headshot)
+   - Slug
+3. Genre
+   - Label (genre name)
+   - Slug
+
+## Frontend Components
+
+- Use Next.js to render the music site.
+
+- **Home Page**: Display a carded list of songs, with filters (e.g., by genre or artist) powered by the API.
+
+- **Song Page**: Show all details for a song (title, lyrics, album art, artist, genres, etc.).
+
+## API Usage & Frontend Integration
+
+- Use the Content Delivery API to fetch music data.
+
+- Filter songs by genre or slug using query parameters.
+
+- Order songs by release date (newest first).
+
+- Support pagination or infinite scroll on the song listing page.
+
+## Preview & Draft Support
+
+- Implement preview URLs for content editors (e.g., to preview a song before publishing).
+
+- Respect draft/published status in frontend logic.
+
+## Additional Skills & Environment
+
+- Gain proficiency in content modeling (single vs. multi-entry types, referencing, validations).
+
+- Use ContentStack APIs (CDA, CMA) and SDKs.
+
+- Manage entries (create, edit, publish), assets (upload, organize), and content states.
+
+- Set up a local environment and a dedicated GitHub branch for your work.
+
+## Developer Instructions
+
+### Types
+
+Content types will be automatically generated via the
+`pregen` script each time `npm run dev` is executed.
+
+### Development
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+1. Run the project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
