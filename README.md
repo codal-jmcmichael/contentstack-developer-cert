@@ -28,35 +28,26 @@ Create the following content types:
 ## Frontend Components
 
 - Use Next.js to render the music site.
-
 - **Home Page**: Display a carded list of songs, with filters (e.g., by genre or artist) powered by the API.
-
 - **Song Page**: Show all details for a song (title, lyrics, album art, artist, genres, etc.).
 
 ## API Usage & Frontend Integration
 
 - Use the Content Delivery API to fetch music data.
-
 - Filter songs by genre or slug using query parameters.
-
 - Order songs by release date (newest first).
-
 - Support pagination or infinite scroll on the song listing page.
 
 ## Preview & Draft Support
 
 - Implement preview URLs for content editors (e.g., to preview a song before publishing).
-
 - Respect draft/published status in frontend logic.
 
 ## Additional Skills & Environment
 
 - Gain proficiency in content modeling (single vs. multi-entry types, referencing, validations).
-
 - Use ContentStack APIs (CDA, CMA) and SDKs.
-
 - Manage entries (create, edit, publish), assets (upload, organize), and content states.
-
 - Set up a local environment and a dedicated GitHub branch for your work.
 
 ## Developer Instructions
