@@ -21,19 +21,29 @@ export const getArtists = async (): Promise<
 };
 
 export const getArtistByName = async (
-  name: string
+  slug: Artist["url"]
 ): Promise<ArtistWithMetadata | undefined> => {
+  console.log("Fetching artist with slug:", slug);
+
   try {
-    const response = await ContentStack.contentType("artist")
+    /*
+     * The .regex() method is used here to match the slug within the
+     * URL field of the artist entries. This allows for more flexible
+     * matching, especially since the artists contain prefixes like
+     * "artists/kendrick-lamar" in their URLs—so we're just matching
+     * the "kendrick-lamar" part to keep the prefix flexible.
+     */
+    const query = await ContentStack.contentType("artist")
       .entry()
-      .query({ query: { title: name } })
+      .query()
+      .regex("url", slug)
       .find<ArtistWithMetadata>();
 
-    const artist = response?.entries?.[0];
+    const artist = query?.entries?.[0];
 
     return artist;
   } catch (error) {
-    console.error(`Error fetching artist by name "${name}":`, error);
+    console.error(`Error fetching artist by slug "${slug}":`, error);
   }
 
   return undefined;
