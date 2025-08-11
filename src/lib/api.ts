@@ -1,42 +1,40 @@
 import ContentStack from "@/lib/contentStackClient";
-import type { Artist } from "@/types/contentStack/generated";
+import { Artist } from "@/types/contentStack/generated";
 import { BaseEntry } from "@contentstack/delivery-sdk";
 
-/*
- * Create a union type that combines Artist and BaseEntry.
- * This allows us to include metadata from ContentStack
- * and see metadata types in TypeScript.
- */
 export type ArtistWithMetadata = Artist & BaseEntry;
 
-export const getArtists = async (): Promise<ArtistWithMetadata[]> => {
-  const response = await ContentStack.contentType("artist")
-    .entry()
-    .includeMetadata()
-    .find<ArtistWithMetadata>();
+export const getArtists = async (): Promise<
+  ArtistWithMetadata[] | undefined
+> => {
+  try {
+    const response = await ContentStack.contentType("artist")
+      .entry()
+      .find<ArtistWithMetadata>();
 
-  const artists = response?.entries;
-
-  if (!artists || !artists.length) {
-    throw new Error("No artists found.");
+    return response.entries;
+  } catch (error) {
+    console.error("Error fetching artists:", error);
   }
 
-  return artists;
+  return [];
 };
 
 export const getArtistByName = async (
   name: string
-): Promise<ArtistWithMetadata> => {
-  const response = await ContentStack.contentType("artist")
-    .entry()
-    .query({ query: { name: name } })
-    .find<ArtistWithMetadata>();
+): Promise<ArtistWithMetadata | undefined> => {
+  try {
+    const response = await ContentStack.contentType("artist")
+      .entry()
+      .query({ query: { title: name } })
+      .find<ArtistWithMetadata>();
 
-  const artist = response?.entries?.[0];
+    const artist = response?.entries?.[0];
 
-  if (!artist) {
-    throw new Error(`Artist with name "${name}" not found.`);
+    return artist;
+  } catch (error) {
+    console.error(`Error fetching artist by name "${name}":`, error);
   }
 
-  return artist;
+  return undefined;
 };

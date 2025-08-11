@@ -57,17 +57,34 @@ export interface Taxonomy {
   non_localizable: boolean;
 }
 
+export interface Song {
+  /** Version */
+  _version?: number;
+  /** Title */
+  title: string;
+  /** URL */
+  url?: string;
+  /** Description */
+  description?: string;
+  /** Lyrics */
+  lyrics?: string;
+  /** Reference (Album) */
+  reference_album?: (Album | ReferencedEntry)[];
+}
+
 export interface Album {
   /** Version */
   _version?: number;
   /** Title */
   title: string;
-  /** Publish Date */
-  publish_date?: string | null;
+  /** URL */
+  url?: string;
+  /** Release Date */
+  release_date?: string | null;
   /** Cover Art */
   cover_art?: File | null;
-  /** Artist */
-  artist: (Artist | ReferencedEntry)[];
+  /** Reference (Artist) */
+  reference_artist: (Artist | ReferencedEntry)[];
   /** Genres */
   taxonomies?: Taxonomy[];
 }

@@ -3,7 +3,7 @@ import { getArtists } from "@/lib/api";
 export default async function ArtistsPage() {
   const artists = await getArtists();
 
-  if (!artists.length) {
+  if (!artists) {
     return (
       <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
         <p>No artists found.</p>
