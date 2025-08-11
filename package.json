@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts'"
+    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts'",
+    "export:stack": "dotenv -e .env.local -- bash -c 'csdx cm:stacks:export -k $CONTENTSTACK_API_KEY -d $CONTENTSTACK_DEST_DIR'"
   },
   "dependencies": {
     "@contentstack/delivery-sdk": "^4.8.0",
@@ -22,6 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "tailwindcss": "^4",
