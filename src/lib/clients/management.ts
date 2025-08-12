@@ -17,10 +17,8 @@ for (const envVar of requiredEnvVars) {
 
 const stackOptions: StackConfig = {
   api_key: process.env.CONTENTSTACK_API_KEY!,
-  management_token: process.env.CONTENTSTACK_READ_MANAGAMENT_TOKEN!,
+  management_token: process.env.CONTENTSTACK_READ_MANAGEMENT_TOKEN!,
 };
 
-const ManagementClient = contentStack.client();
-ManagementClient.stack(stackOptions);
-
+const ManagementClient = contentStack.client().stack(stackOptions);
 export default ManagementClient;

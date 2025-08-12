@@ -1,7 +1,6 @@
 import { DeliveryClient, ManagementClient } from "@/lib/clients";
 import { Artist, Taxonomy } from "@/types/contentStack/generated";
 import { BaseEntry } from "@contentstack/delivery-sdk";
-import { Stack } from "@contentstack/management/types/stack";
 
 export type ArtistWithMetadata = Artist & BaseEntry;
 
@@ -70,12 +69,9 @@ export const getGenres = async (): Promise<
   Taxonomy["taxonomy_uid"][] | undefined
 > => {
   try {
-    const stack = ManagementClient.stack({
-      api_key: process.env.CONTENTSTACK_API_KEY!,
-      management_token: process.env.CONTENTSTACK_READ_MANAGEMENT_TOKEN!,
-    });
-
-    const allTaxonomiesResponse = await stack.taxonomy().query().find();
+    const allTaxonomiesResponse = await ManagementClient.taxonomy()
+      .query()
+      .find();
 
     // Find the specific "Genres" taxonomy from the list of all taxonomies
     const genresTaxonomy = allTaxonomiesResponse.items.find(
@@ -88,8 +84,7 @@ export const getGenres = async (): Promise<
     }
 
     // Use the UID of the "Genres" taxonomy to fetch its terms in a new query
-    const termsResponse = await stack
-      .taxonomy(genresTaxonomy.uid) // Scope the query to the "Genres" taxonomy
+    const termsResponse = await ManagementClient.taxonomy(genresTaxonomy.uid) // Scope the query to the "Genres" taxonomy
       .terms()
       .query()
       .find();
