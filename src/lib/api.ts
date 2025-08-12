@@ -1,6 +1,26 @@
 import { DeliveryClient, ManagementClient } from "@/lib/clients";
-import { Artist, Taxonomy } from "@/types/contentStack/generated";
+import { Artist, Song, Taxonomy } from "@/types/contentStack/generated";
 import { BaseEntry } from "@contentstack/delivery-sdk";
+
+// TODO: Consolidate these methods into a single "getEntriesByContentType"
+// or "getEntriesByUid" method that takes the content type as a parameter
+// and returns the appropriate type. This will reduce code duplication and
+// make it easier to add new content types in the future.
+export type SongWithMetadata = Song & BaseEntry;
+
+export const getSongs = async (): Promise<SongWithMetadata[] | undefined> => {
+  try {
+    const response = await DeliveryClient.contentType("song")
+      .entry()
+      .find<SongWithMetadata>();
+
+    return response.entries;
+  } catch (error) {
+    console.error("Error fetching songs:", error);
+  }
+
+  return [];
+};
 
 export type ArtistWithMetadata = Artist & BaseEntry;
 
