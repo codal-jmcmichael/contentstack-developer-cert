@@ -32,5 +32,5 @@ const stackOptions: StackConfig = {
   },
 };
 
-const ContentStack = contentstack.stack(stackOptions);
-export default ContentStack;
+const DeliveryClient = contentstack.stack(stackOptions);
+export default DeliveryClient;

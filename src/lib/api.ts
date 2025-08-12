@@ -1,14 +1,21 @@
-import ContentStack from "@/lib/contentStackClient";
-import { Artist } from "@/types/contentStack/generated";
+import { DeliveryClient, ManagementClient } from "@/lib/clients";
+import { Artist, Taxonomy } from "@/types/contentStack/generated";
 import { BaseEntry } from "@contentstack/delivery-sdk";
+import { Stack } from "@contentstack/management/types/stack";
 
 export type ArtistWithMetadata = Artist & BaseEntry;
 
+/**
+ *
+ * @returns A list of artists from the Contentstack delivery API.
+ * This function fetches all entries of the "artist" content type.
+ * It returns an array of artists with their metadata.
+ */
 export const getArtists = async (): Promise<
   ArtistWithMetadata[] | undefined
 > => {
   try {
-    const response = await ContentStack.contentType("artist")
+    const response = await DeliveryClient.contentType("artist")
       .entry()
       .find<ArtistWithMetadata>();
 
@@ -20,20 +27,24 @@ export const getArtists = async (): Promise<
   return [];
 };
 
+/**
+ *
+ * @param slug The slug of the artist to fetch.
+ * The slug is typically the URL-friendly version of the artist's name.
+ * For example, "kendrick-lamar" for the URL "/artists/kendrick-lamar".
+ * @returns
+ */
 export const getArtistByName = async (
   slug: Artist["url"]
 ): Promise<ArtistWithMetadata | undefined> => {
-  console.log("Fetching artist with slug:", slug);
-
   try {
     /*
      * The .regex() method is used here to match the slug within the
-     * URL field of the artist entries. This allows for more flexible
-     * matching, especially since the artists contain prefixes like
-     * "artists/kendrick-lamar" in their URLs—so we're just matching
-     * the "kendrick-lamar" part to keep the prefix flexible.
+     * URL field of the artist entries. We're just matching the
+     * "kendrick-lamar" part of "/artists/kendrick-lamar" to keep the
+     * "/artists/..." prefix flexible.
      */
-    const query = await ContentStack.contentType("artist")
+    const query = await DeliveryClient.contentType("artist")
       .entry()
       .query()
       .regex("url", slug)
@@ -47,4 +58,53 @@ export const getArtistByName = async (
   }
 
   return undefined;
+};
+
+/**
+ *
+ * @returns A list of genres from the Contentstack management API.
+ * This function fetches the "Genres" taxonomy and its terms.
+ * It returns an array of terms representing different genres.
+ */
+export const getGenres = async (): Promise<
+  Taxonomy["taxonomy_uid"][] | undefined
+> => {
+  try {
+    const stack = ManagementClient.stack({
+      api_key: process.env.CONTENTSTACK_API_KEY!,
+      management_token: process.env.CONTENTSTACK_READ_MANAGEMENT_TOKEN!,
+    });
+
+    const allTaxonomiesResponse = await stack.taxonomy().query().find();
+
+    // Find the specific "Genres" taxonomy from the list of all taxonomies
+    const genresTaxonomy = allTaxonomiesResponse.items.find(
+      (tax: any) => tax.name.toLowerCase() === "genres"
+    );
+
+    if (!genresTaxonomy) {
+      console.error('Taxonomy with the name "Genres" was not found.');
+      return;
+    }
+
+    // Use the UID of the "Genres" taxonomy to fetch its terms in a new query
+    const termsResponse = await stack
+      .taxonomy(genresTaxonomy.uid) // Scope the query to the "Genres" taxonomy
+      .terms()
+      .query()
+      .find();
+
+    if (!termsResponse || !termsResponse.items) {
+      console.error("No terms found in the 'Genres' taxonomy.");
+      return;
+    }
+
+    // Map the terms to their UIDs
+    const terms = termsResponse.items.map((term: any) => term.uid);
+
+    return terms;
+  } catch (error) {
+    console.error("Error fetching genres from taxonomy:", error);
+    return;
+  }
 };
