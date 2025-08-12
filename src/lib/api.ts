@@ -94,10 +94,7 @@ export const getGenres = async (): Promise<
       return;
     }
 
-    // Map the terms to their UIDs
-    const terms = termsResponse.items.map((term: any) => term.uid);
-
-    return terms;
+    return termsResponse.items.map((term: any) => term.uid);
   } catch (error) {
     console.error("Error fetching genres from taxonomy:", error);
     return;
