@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getGenres } from "@/lib/api";
+import { HomePageProps } from "@/components";
 
-const GenresList = async () => {
-  const genres = await getGenres();
+export interface GenresListProps {
+  genres: HomePageProps["genres"];
+}
+
+const GenresList = (props: GenresListProps) => {
+  const { genres } = props;
 
   if (!genres || genres.length === 0) {
     return <p>No genres found.</p>;
@@ -12,10 +16,15 @@ const GenresList = async () => {
   return (
     <div>
       <ul className="flex gap-3">
-        {genres?.map((genre) => (
-          <Button key={genre} variant="secondary" asChild>
+        {genres?.map((genre, index) => (
+          <Button
+            key={`${genre.uid}-${index}`}
+            variant="secondary"
+            // onClick={() => setSelectedGenre(genre.name)}
+            asChild
+          >
             <Badge variant="secondary" className="text-lg">
-              {genre}
+              {genre.name}
             </Badge>
           </Button>
         ))}

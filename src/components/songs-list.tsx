@@ -1,7 +1,11 @@
-import { getSongs } from "@/lib/api";
+import { HomePageProps } from "@/components/home-page";
 
-const SongsList = async () => {
-  const songs = await getSongs();
+export interface SongsListProps {
+  songs: HomePageProps["songs"];
+}
+
+const SongsList = (props: SongsListProps) => {
+  const { songs } = props;
 
   if (!songs || songs.length === 0) {
     return <p>No songs found.</p>;
@@ -10,8 +14,8 @@ const SongsList = async () => {
   return (
     <div>
       <ul className="flex flex-col gap-3">
-        {songs?.map((song) => (
-          <li key={song.uid}>{song.title}</li>
+        {songs?.map((song, index) => (
+          <li key={`${song.uid}-${index}`}>{song.title}</li>
         ))}
       </ul>
     </div>

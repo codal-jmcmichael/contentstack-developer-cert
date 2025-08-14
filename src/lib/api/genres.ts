@@ -1,44 +1,42 @@
 import { ManagementClient } from "@/lib/clients";
-import { Taxonomy } from "@/types/contentStack/generated";
 import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
-import { Taxonomy as ManagementTaxonomy } from "@contentstack/management/types/stack/taxonomy";
+
+/**
+ *
+ * @param uid The UID of the genre to fetch.
+ * @returns A promise that resolves to the genre term if found, or undefined if not found.
+ * This function fetches the genre term from the Contentstack management API
+ * using the provided UID.
+ */
+export const getGenreByUid = async (uid: string): Promise<Term | undefined> => {
+  try {
+    const response = await ManagementClient.taxonomy("genres")
+      .terms()
+      .query({ uid })
+      .find();
+
+    return response.items?.[0];
+  } catch (error) {
+    console.error("Error fetching genre by UID:", error);
+  }
+
+  return undefined;
+};
 
 /**
  *
  * @returns A list of genres from the Contentstack management API.
- * This function fetches the "Genres" taxonomy and its terms.
- * It returns an array of terms representing different genres.
+ * This function fetches all terms of the "genres" taxonomy.
+ * It returns an array of genres with their metadata.
  */
-export const getGenres = async (): Promise<
-  Taxonomy["taxonomy_uid"][] | undefined
-> => {
+export const getGenres = async (): Promise<Term[] | undefined> => {
   try {
-    const allTaxonomiesResponse = await ManagementClient.taxonomy()
-      .query()
-      .find();
-
-    // Find the specific "Genres" taxonomy from the list of all taxonomies
-    const genresTaxonomy = allTaxonomiesResponse.items.find(
-      (tax: ManagementTaxonomy) => tax.name.toLowerCase() === "genres"
-    );
-
-    if (!genresTaxonomy) {
-      console.error('Taxonomy with the name "Genres" was not found.');
-      return;
-    }
-
-    // Use the UID of the "Genres" taxonomy to fetch its terms in a new query
-    const termsResponse = await ManagementClient.taxonomy(genresTaxonomy.uid) // Scope the query to the "Genres" taxonomy
+    const response = await ManagementClient.taxonomy("genres")
       .terms()
       .query()
       .find();
 
-    if (!termsResponse || !termsResponse.items) {
-      console.error("No terms found in the 'Genres' taxonomy.");
-      return;
-    }
-
-    return termsResponse.items.map((term: Term) => term.name);
+    return response.items;
   } catch (error) {
     console.error("Error fetching genres from taxonomy:", error);
     return;

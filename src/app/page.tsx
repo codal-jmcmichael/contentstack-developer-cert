@@ -1,18 +1,18 @@
-import GenresList from "@/components/genres-list";
-import SongsList from "@/components/songs-list";
+import { HomePage } from "@/components";
+import { HomePageProvider } from "@/contexts/HomePageProvider";
+import { getSongs, getGenres } from "@/lib/api";
 
 export default async function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div className="flex flex-wrap gap-3">
-          <GenresList />
-        </div>
+  const songs = await getSongs();
+  const genres = await getGenres();
 
-        <div className="flex flex-wrap gap-3">
-          <SongsList />
-        </div>
-      </main>
-    </div>
+  if (!songs || !genres) {
+    return <div>Error loading data</div>;
+  }
+
+  return (
+    <HomePageProvider>
+      <HomePage songs={songs} genres={genres} />
+    </HomePageProvider>
   );
 }

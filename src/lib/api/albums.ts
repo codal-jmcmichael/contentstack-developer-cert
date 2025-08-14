@@ -1,33 +1,22 @@
 import { DeliveryClient } from "@/lib/clients";
 import type { Album } from "@/types/contentStack/generated";
-import { BaseEntry } from "@contentstack/delivery-sdk";
 
-export type AlbumWithMetadata = Album & BaseEntry;
-
-export const getAlbums = async (): Promise<AlbumWithMetadata[] | undefined> => {
+/**
+ *
+ * @param uid The UID of the album to fetch.
+ * @returns A promise that resolves to the album entry if found, or undefined if not found.
+ * This function fetches the album entry from the Contentstack delivery API
+ * using the provided UID.
+ */
+export const getAlbumByUid = async (
+  uid: string
+): Promise<Album | undefined> => {
   try {
     const response = await DeliveryClient.contentType("album")
       .entry()
-      .find<AlbumWithMetadata>();
-
-    return response.entries;
-  } catch (error) {
-    console.error("Error fetching albums:", error);
-  }
-
-  return [];
-};
-
-export const getAlbumByUid = async (
-  uid: AlbumWithMetadata["uid"]
-): Promise<AlbumWithMetadata | undefined> => {
-  try {
-    const response = await DeliveryClient.contentType("contentTypeUid")
-      .entry()
+      .includeMetadata()
       .query({ uid })
-      .find<AlbumWithMetadata>();
-
-    console.log("Fetched album:", response);
+      .find<Album>();
 
     return response.entries?.[0];
   } catch (error) {
@@ -35,4 +24,24 @@ export const getAlbumByUid = async (
   }
 
   return undefined;
+};
+
+/**
+ *
+ * @returns A list of albums from the Contentstack delivery API.
+ * This function fetches all entries of the "album" content type.
+ */
+export const getAlbums = async (): Promise<Album[] | undefined> => {
+  try {
+    const response = await DeliveryClient.contentType("album")
+      .entry()
+      .includeMetadata()
+      .find<Album>();
+
+    return response.entries;
+  } catch (error) {
+    console.error("Error fetching albums:", error);
+  }
+
+  return [];
 };

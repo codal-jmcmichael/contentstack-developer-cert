@@ -1,35 +1,5 @@
 import { DeliveryClient } from "@/lib/clients";
 import { Artist } from "@/types/contentStack/generated";
-import { BaseEntry } from "@contentstack/delivery-sdk";
-
-// TODO: Consolidate these methods into a single "getEntriesByContentType"
-// or "getEntriesByUid" method that takes the content type as a parameter
-// and returns the appropriate type. This will reduce code duplication and
-// make it easier to add new content types in the future.
-
-export type ArtistWithMetadata = Artist & BaseEntry;
-
-/**
- *
- * @returns A list of artists from the Contentstack delivery API.
- * This function fetches all entries of the "artist" content type.
- * It returns an array of artists with their metadata.
- */
-export const getArtists = async (): Promise<
-  ArtistWithMetadata[] | undefined
-> => {
-  try {
-    const response = await DeliveryClient.contentType("artist")
-      .entry()
-      .find<ArtistWithMetadata>();
-
-    return response.entries;
-  } catch (error) {
-    console.error("Error fetching artists:", error);
-  }
-
-  return [];
-};
 
 /**
  *
@@ -40,7 +10,7 @@ export const getArtists = async (): Promise<
  */
 export const getArtistByName = async (
   slug: Artist["url"]
-): Promise<ArtistWithMetadata | undefined> => {
+): Promise<Artist | undefined> => {
   try {
     /*
      * The .regex() method is used here to match the slug within the
@@ -50,9 +20,10 @@ export const getArtistByName = async (
      */
     const query = await DeliveryClient.contentType("artist")
       .entry()
+      .includeMetadata()
       .query()
       .regex("url", slug)
-      .find<ArtistWithMetadata>();
+      .find<Artist>();
 
     const artist = query?.entries?.[0];
 
@@ -62,4 +33,25 @@ export const getArtistByName = async (
   }
 
   return undefined;
+};
+
+/**
+ *
+ * @returns A list of artists from the Contentstack delivery API.
+ * This function fetches all entries of the "artist" content type.
+ * It returns an array of artists with their metadata.
+ */
+export const getArtists = async (): Promise<Artist[] | undefined> => {
+  try {
+    const response = await DeliveryClient.contentType("artist")
+      .entry()
+      .includeMetadata()
+      .find<Artist>();
+
+    return response.entries;
+  } catch (error) {
+    console.error("Error fetching artists:", error);
+  }
+
+  return [];
 };
