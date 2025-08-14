@@ -1,13 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { HomePageProps } from "@/components";
+import { useHomePageContext } from "@/contexts/HomePageProvider";
+import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
 
-export interface GenresListProps {
-  genres: HomePageProps["genres"];
+interface GenresListProps {
+  genres: Term[];
 }
 
 const GenresList = (props: GenresListProps) => {
   const { genres } = props;
+  const { setSelectedGenre } = useHomePageContext();
 
   if (!genres || genres.length === 0) {
     return <p>No genres found.</p>;
@@ -20,7 +24,7 @@ const GenresList = (props: GenresListProps) => {
           <Button
             key={`${genre.uid}-${index}`}
             variant="secondary"
-            // onClick={() => setSelectedGenre(genre.name)}
+            onClick={() => setSelectedGenre(genre.name)}
             asChild
           >
             <Badge variant="secondary" className="text-lg">

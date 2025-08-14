@@ -1,4 +1,5 @@
 import { DeliveryClient } from "@/lib/clients";
+import { sanitizeMethods } from "@/lib/helpers/sanitizeMethods";
 import { Artist } from "@/types/contentStack/generated";
 
 /**
@@ -25,14 +26,10 @@ export const getArtistByName = async (
       .regex("url", slug)
       .find<Artist>();
 
-    const artist = query?.entries?.[0];
-
-    return artist;
+    return sanitizeMethods(query?.entries?.[0]) || undefined;
   } catch (error) {
     console.error(`Error fetching artist by slug "${slug}":`, error);
   }
-
-  return undefined;
 };
 
 /**
@@ -48,10 +45,8 @@ export const getArtists = async (): Promise<Artist[] | undefined> => {
       .includeMetadata()
       .find<Artist>();
 
-    return response.entries;
+    return sanitizeMethods(response.entries) || [];
   } catch (error) {
     console.error("Error fetching artists:", error);
   }
-
-  return [];
 };

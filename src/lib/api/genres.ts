@@ -1,4 +1,5 @@
 import { ManagementClient } from "@/lib/clients";
+import { sanitizeMethods } from "@/lib/helpers/sanitizeMethods";
 import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
 
 /**
@@ -15,12 +16,10 @@ export const getGenreByUid = async (uid: string): Promise<Term | undefined> => {
       .query({ uid })
       .find();
 
-    return response.items?.[0];
+    return sanitizeMethods(response.items?.[0]) || undefined;
   } catch (error) {
     console.error("Error fetching genre by UID:", error);
   }
-
-  return undefined;
 };
 
 /**
@@ -36,7 +35,7 @@ export const getGenres = async (): Promise<Term[] | undefined> => {
       .query()
       .find();
 
-    return response.items;
+    return sanitizeMethods(response.items) || [];
   } catch (error) {
     console.error("Error fetching genres from taxonomy:", error);
     return;

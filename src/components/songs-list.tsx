@@ -1,7 +1,7 @@
-import { HomePageProps } from "@/components/home-page";
+import { Song } from "@/types/contentStack/generated";
 
 export interface SongsListProps {
-  songs: HomePageProps["songs"];
+  songs: Song[];
 }
 
 const SongsList = (props: SongsListProps) => {
@@ -15,7 +15,7 @@ const SongsList = (props: SongsListProps) => {
     <div>
       <ul className="flex flex-col gap-3">
         {songs?.map((song, index) => (
-          <li key={`${song.uid}-${index}`}>{song.title}</li>
+          <li key={`${song.title}-${index}`}>{song.title}</li>
         ))}
       </ul>
     </div>

@@ -1,6 +1,6 @@
 import { DeliveryClient } from "@/lib/clients";
+import { sanitizeMethods } from "@/lib/helpers/sanitizeMethods";
 import type { Album } from "@/types/contentStack/generated";
-
 /**
  *
  * @param uid The UID of the album to fetch.
@@ -18,12 +18,10 @@ export const getAlbumByUid = async (
       .query({ uid })
       .find<Album>();
 
-    return response.entries?.[0];
+    return sanitizeMethods(response.entries?.[0]) || undefined;
   } catch (error) {
     console.error("Error fetching entry by UID:", error);
   }
-
-  return undefined;
 };
 
 /**
@@ -38,7 +36,7 @@ export const getAlbums = async (): Promise<Album[] | undefined> => {
       .includeMetadata()
       .find<Album>();
 
-    return response.entries;
+    return sanitizeMethods(response.entries) || [];
   } catch (error) {
     console.error("Error fetching albums:", error);
   }

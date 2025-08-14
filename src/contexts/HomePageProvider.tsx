@@ -1,11 +1,10 @@
 "use client";
 
-import { Genre } from "@/lib/api";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface HomePageContextProps {
-  selectedGenre: Genre["taxonomy_uid"] | null;
-  setSelectedGenre: React.Dispatch<React.SetStateAction<Genre["uid"] | null>>;
+  selectedGenre: string | null;
+  setSelectedGenre: (genre: string | null) => void;
 }
 
 const HomePageContext = createContext<HomePageContextProps | undefined>(
