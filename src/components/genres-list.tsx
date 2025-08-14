@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useHomePageContext } from "@/contexts/HomePageProvider";
 import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
+import { useEffect } from "react";
 
 interface GenresListProps {
   genres: Term[];
@@ -11,7 +12,11 @@ interface GenresListProps {
 
 const GenresList = (props: GenresListProps) => {
   const { genres } = props;
-  const { setSelectedGenre } = useHomePageContext();
+  const { selectedGenre, setSelectedGenre } = useHomePageContext();
+
+  useEffect(() => {
+    console.log("Selected genre changed:", selectedGenre);
+  }, [selectedGenre]);
 
   if (!genres || genres.length === 0) {
     return <p>No genres found.</p>;
@@ -23,11 +28,14 @@ const GenresList = (props: GenresListProps) => {
         {genres?.map((genre, index) => (
           <Button
             key={`${genre.uid}-${index}`}
-            variant="secondary"
+            variant={genre.uid === selectedGenre ? "default" : "secondary"}
             onClick={() => setSelectedGenre(genre.name)}
             asChild
           >
-            <Badge variant="secondary" className="text-lg">
+            <Badge
+              variant={genre.uid === selectedGenre ? "default" : "secondary"}
+              className="text-lg"
+            >
               {genre.name}
             </Badge>
           </Button>
