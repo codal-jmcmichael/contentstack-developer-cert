@@ -1,5 +1,5 @@
 import { DeliveryClient } from "@/lib/clients";
-import { sanitizeMethods } from "@/lib/helpers/sanitizeMethods";
+import { sanitizeMethods } from "@/lib/helpers";
 import { Artist } from "@/types/contentStack/generated";
 
 /**

@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface HomePageContextProps {
+  filteredSongs?: any[];
   selectedGenre: string | null;
   setSelectedGenre: (genre: string | null) => void;
 }
@@ -14,10 +15,16 @@ const HomePageContext = createContext<HomePageContextProps | undefined>(
 export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGenre, setSelectedGenre] = useState<
     HomePageContextProps["selectedGenre"] | null
-  >(null);
+  >("all");
+
+  const handleSetSelectedGenre = (genre: string | null) => {
+    setSelectedGenre(genre ? genre.toLowerCase() : null);
+  };
 
   return (
-    <HomePageContext.Provider value={{ selectedGenre, setSelectedGenre }}>
+    <HomePageContext.Provider
+      value={{ selectedGenre, setSelectedGenre: handleSetSelectedGenre }}
+    >
       {children}
     </HomePageContext.Provider>
   );

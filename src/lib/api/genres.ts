@@ -1,5 +1,5 @@
 import { ManagementClient } from "@/lib/clients";
-import { sanitizeMethods } from "@/lib/helpers/sanitizeMethods";
+import { sanitizeMethods } from "@/lib/helpers";
 import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
 
 /**

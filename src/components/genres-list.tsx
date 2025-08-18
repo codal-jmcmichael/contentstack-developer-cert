@@ -26,19 +26,31 @@ const GenresList = (props: GenresListProps) => {
     <div>
       <ul className="flex gap-3">
         {genres?.map((genre, index) => (
-          <Button
-            key={`${genre.uid}-${index}`}
-            variant={genre.uid === selectedGenre ? "default" : "secondary"}
-            onClick={() => setSelectedGenre(genre.name)}
-            asChild
-          >
-            <Badge
-              variant={genre.uid === selectedGenre ? "default" : "secondary"}
-              className="text-lg"
+          <>
+            {index === 0 && (
+              <Button
+                variant={selectedGenre === "all" ? "default" : "secondary"}
+                onClick={() => setSelectedGenre("all")}
+                className="text-lg"
+              >
+                All
+              </Button>
+            )}
+
+            <Button
+              key={`${genre.uid}-${index}`}
+              variant={selectedGenre === genre.uid ? "default" : "secondary"}
+              onClick={() => setSelectedGenre(genre.name)}
+              asChild
             >
-              {genre.name}
-            </Badge>
-          </Button>
+              <Badge
+                variant={selectedGenre === genre.uid ? "default" : "secondary"}
+                className="text-lg"
+              >
+                {genre.name}
+              </Badge>
+            </Button>
+          </>
         ))}
       </ul>
     </div>
