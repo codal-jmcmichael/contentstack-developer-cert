@@ -1,11 +1,11 @@
 "use client";
 
 import { useHomePageContext } from "@/contexts/HomePageProvider";
-import { Song } from "@/types/contentStack/generated";
 import { toSnakeCase } from "@/lib/helpers";
+import { SongWithAlbumData } from "@/lib/api/songs";
 
 export interface SongsListProps {
-  songs: Song[];
+  songs: SongWithAlbumData[];
 }
 
 const SongsList = (props: SongsListProps) => {
@@ -19,7 +19,11 @@ const SongsList = (props: SongsListProps) => {
   let filteredSongs = songs;
   if (selectedGenre !== "all") {
     filteredSongs = selectedGenre
-      ? songs.filter((song) => song.albumGenre === toSnakeCase(selectedGenre))
+      ? songs.filter(
+          (song) =>
+            song?.reference_album?.[0]?.taxonomies?.[0]?.term_uid ===
+            toSnakeCase(selectedGenre)
+        )
       : songs;
   }
 

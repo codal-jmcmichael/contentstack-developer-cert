@@ -1,30 +1,14 @@
 import { GenresList, SongsList } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
-import { getSongs, getGenres, getAlbumByUid } from "@/lib/api";
-import { Song } from "@/types/contentStack/generated";
-
-export type SongWithAlbumData = Song & {
-  albumGenre: string;
-};
+import { getGenres, getSongsWithAlbumData } from "@/lib/api";
 
 export default async function Home() {
-  const songs = await getSongs();
+  const songs = await getSongsWithAlbumData();
   const genres = await getGenres();
 
   if (!songs || !genres) {
     return <div>Error loading data</div>;
   }
-
-  const songsWithAlbumData: SongWithAlbumData[] = await Promise.all(
-    songs.map(async (song) => {
-      const album = await getAlbumByUid(song.reference_album?.[0]?.uid);
-      console.log(album?.taxonomies?.[0]?.term_uid);
-      return {
-        ...song,
-        albumGenre: album?.taxonomies?.[0]?.term_uid,
-      };
-    })
-  );
 
   return (
     <HomePageProvider>
@@ -35,7 +19,7 @@ export default async function Home() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <SongsList songs={songsWithAlbumData} />
+            <SongsList songs={songs} />
           </div>
         </main>
       </div>
