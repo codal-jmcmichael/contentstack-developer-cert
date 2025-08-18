@@ -15,7 +15,7 @@ const HomePageContext = createContext<HomePageContextProps | undefined>(
 export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGenre, setSelectedGenre] = useState<
     HomePageContextProps["selectedGenre"] | null
-  >("all");
+  >(null);
 
   const handleSetSelectedGenre = (genre: string | null) => {
     setSelectedGenre(genre ? genre.toLowerCase() : null);

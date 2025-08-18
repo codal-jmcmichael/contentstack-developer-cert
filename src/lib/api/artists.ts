@@ -1,6 +1,25 @@
 import { DeliveryClient } from "@/lib/clients";
-import { sanitizeMethods } from "@/lib/helpers";
 import { Artist } from "@/types/contentStack/generated";
+
+/**
+ *
+ * @returns A list of artists from the Contentstack delivery API.
+ * This function fetches all entries of the "artist" content type.
+ * It returns an array of artists with their metadata.
+ */
+export const getArtists = async (): Promise<Artist[] | undefined> => {
+  try {
+    const response = await DeliveryClient.contentType("artist")
+      .entry()
+      .includeMetadata()
+      .find<Artist>();
+
+    return response.entries ?? [];
+  } catch (error) {
+    console.error("Error fetching artists:", error);
+    return [];
+  }
+};
 
 /**
  *
@@ -21,32 +40,13 @@ export const getArtistByName = async (
      */
     const query = await DeliveryClient.contentType("artist")
       .entry()
-      .includeMetadata()
       .query()
       .regex("url", slug)
       .find<Artist>();
 
-    return sanitizeMethods(query?.entries?.[0]) || undefined;
+    return query?.entries?.[0] ?? undefined;
   } catch (error) {
     console.error(`Error fetching artist by slug "${slug}":`, error);
-  }
-};
-
-/**
- *
- * @returns A list of artists from the Contentstack delivery API.
- * This function fetches all entries of the "artist" content type.
- * It returns an array of artists with their metadata.
- */
-export const getArtists = async (): Promise<Artist[] | undefined> => {
-  try {
-    const response = await DeliveryClient.contentType("artist")
-      .entry()
-      .includeMetadata()
-      .find<Artist>();
-
-    return sanitizeMethods(response.entries) || [];
-  } catch (error) {
-    console.error("Error fetching artists:", error);
+    return undefined;
   }
 };

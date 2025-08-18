@@ -1,5 +1,4 @@
 import { DeliveryClient } from "@/lib/clients";
-import { sanitizeMethods } from "@/lib/helpers";
 import { Album, Song } from "@/types/contentStack/generated";
 import { TaxonomyData } from "@contentstack/management/types/stack/taxonomy";
 
@@ -12,12 +11,11 @@ export const getSongs = async (): Promise<Song[] | undefined> => {
   try {
     const response = await DeliveryClient.contentType("song")
       .entry()
-      .includeMetadata()
       .find<Song>();
-
-    return sanitizeMethods(response.entries) || [];
+    return response.entries || [];
   } catch (error) {
     console.error("Error fetching songs:", error);
+    return [];
   }
 };
 
@@ -44,9 +42,9 @@ export const getSongsWithAlbumData = async (): Promise<
       .includeMetadata()
       .includeReference("reference_album")
       .find<SongWithAlbumData>();
-
-    return sanitizeMethods(response.entries) || [];
+    return response.entries || [];
   } catch (error) {
-    console.error("Error fetching songs:", error);
+    console.error("Error fetching songs with album data:", error);
+    return [];
   }
 };
