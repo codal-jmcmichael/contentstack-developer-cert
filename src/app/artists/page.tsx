@@ -16,7 +16,7 @@ export default async function ArtistsPage() {
       <h1 className="text-2xl font-bold">Artists</h1>
       <ul>
         {artists.map((artist) => (
-          <li key={artist.uid} className="mb-4">
+          <li key={artist.title} className="mb-4">
             <h2 className="text-xl font-semibold">{artist.title}</h2>
           </li>
         ))}

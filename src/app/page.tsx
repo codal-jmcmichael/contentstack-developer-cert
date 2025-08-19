@@ -1,9 +1,9 @@
 import { GenresList, SongsList } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
-import { getGenres, getSongsWithAlbumData } from "@/lib/api";
+import { getGenres, getSongsWithReferenceData } from "@/lib/api";
 
 export default async function Home() {
-  const songs = await getSongsWithAlbumData();
+  const songs = await getSongsWithReferenceData();
   const genres = await getGenres();
 
   if (!songs || !genres) {

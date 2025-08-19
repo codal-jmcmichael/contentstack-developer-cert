@@ -1,6 +1,5 @@
 import { DeliveryClient } from "@/lib/clients";
-import { Album, Song } from "@/types/contentStack/generated";
-import { TaxonomyQueryOperation } from "@contentstack/delivery-sdk";
+import { Album, Artist, Song } from "@/types/contentStack/generated";
 import { TaxonomyData } from "@contentstack/management/types/stack/taxonomy";
 
 /**
@@ -25,9 +24,11 @@ export const getSongs = async (): Promise<Song[] | undefined> => {
  * for artists and albums, allowing us to fetch additional information
  * related to each song.
  */
-export type ArtistData = {
+type ArtistData = {
   uid?: string;
   title?: string;
+  url?: string;
+  rte_synopsis?: Artist["rte_synopsis"];
 };
 
 type AlbumData = Album & {
@@ -46,7 +47,7 @@ export type SongWithReferenceData = Song & {
  * This function fetches all entries of the "song" content type and includes
  * the album data by resolving the reference to the album UID.
  */
-export const getSongsWithAlbumData = async (): Promise<
+export const getSongsWithReferenceData = async (): Promise<
   SongWithReferenceData[] | undefined
 > => {
   try {

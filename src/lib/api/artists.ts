@@ -21,6 +21,10 @@ export const getArtists = async (): Promise<Artist[] | undefined> => {
   }
 };
 
+type ArtistData = Artist & {
+  uid: string;
+};
+
 /**
  *
  * @param slug The slug of the artist to fetch.
@@ -29,8 +33,8 @@ export const getArtists = async (): Promise<Artist[] | undefined> => {
  * @returns
  */
 export const getArtistByName = async (
-  slug: Artist["url"]
-): Promise<Artist | undefined> => {
+  slug: ArtistData["url"]
+): Promise<ArtistData | undefined> => {
   try {
     /*
      * The .regex() method is used here to match the slug within the
@@ -40,9 +44,10 @@ export const getArtistByName = async (
      */
     const query = await DeliveryClient.contentType("artist")
       .entry()
+      .includeMetadata()
       .query()
       .regex("url", slug)
-      .find<Artist>();
+      .find<ArtistData>();
 
     return query?.entries?.[0] ?? undefined;
   } catch (error) {

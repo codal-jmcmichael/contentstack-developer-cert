@@ -57,6 +57,28 @@ export interface Taxonomy {
   non_localizable: boolean;
 }
 
+export interface JSONRTENode {
+  type: string;
+  uid: string;
+  _version: number;
+  attrs: Record<string, any>;
+  children?: JSONRTENode[];
+  text?: string;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  src?: string;
+  alt?: string;
+  href?: string;
+  target?: string;
+  embed?: {
+    type: string;
+    uid: string;
+    _version: number;
+    attrs: Record<string, any>;
+  };
+}
+
 export interface Song {
   /** Version */
   _version?: number;
@@ -98,6 +120,12 @@ export interface Artist {
   url: string;
   /** Featured Image */
   featured_image?: File | null;
-  /** Synopsis */
-  synopsis?: string;
+  /** Synopsis (Rich Text) */
+  rte_synopsis?: {
+    type: string;
+    uid: string;
+    _version: number;
+    attrs: Record<string, any>;
+    children: JSONRTENode[];
+  };
 }
