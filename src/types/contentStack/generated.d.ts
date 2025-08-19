@@ -57,6 +57,8 @@ export interface Taxonomy {
   non_localizable: boolean;
 }
 
+export type TaxonomyEntry = Taxonomy & { term_uid: string };
+
 export interface JSONRTENode {
   type: string;
   uid: string;
@@ -79,13 +81,29 @@ export interface JSONRTENode {
   };
 }
 
-export interface Song {
+export interface SystemFields {
+  uid?: string;
+  created_at?: string;
+  updated_at?: string;
+  created_by?: string;
+  updated_by?: string;
+  _content_type_uid?: string;
+  tags?: string[];
+  ACL?: any[];
+  _version?: number;
+  _in_progress?: boolean;
+  locale?: string;
+  publish_details?: PublishDetails;
+  title?: string;
+}
+
+export interface Song extends SystemFields {
   /** Version */
   _version?: number;
   /** Title */
   title: string;
   /** URL */
-  url?: string;
+  url: string;
   /** Description */
   description?: string;
   /** Lyrics */
@@ -96,7 +114,7 @@ export interface Song {
   reference_album?: (Album | ReferencedEntry)[];
 }
 
-export interface Album {
+export interface Album extends SystemFields {
   /** Version */
   _version?: number;
   /** Title */
@@ -107,11 +125,11 @@ export interface Album {
   release_date?: string | null;
   /** Cover Art */
   cover_art?: File | null;
-  /** Genres */
-  taxonomies?: Taxonomy[];
+  /** Taxonomies */
+  taxonomies?: Taxonomy | TaxonomyEntry[];
 }
 
-export interface Artist {
+export interface Artist extends SystemFields {
   /** Version */
   _version?: number;
   /** Name */

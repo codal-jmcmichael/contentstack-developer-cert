@@ -8,11 +8,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts'",
+    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts' --include-system-fields --include-referenced-entry",
     "export:stack": "dotenv -e .env.local -- bash -c 'csdx cm:stacks:export -k $CONTENTSTACK_API_KEY -d $CONTENTSTACK_DEST_DIR'"
   },
   "dependencies": {
     "@contentstack/delivery-sdk": "^4.8.0",
+    "@contentstack/json-rte-serializer": "^3.0.3",
     "@contentstack/management": "^1.23.2",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",

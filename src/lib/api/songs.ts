@@ -1,6 +1,6 @@
 import { DeliveryClient } from "@/lib/clients";
-import { Album, Artist, Song } from "@/types/contentStack/generated";
-import { TaxonomyData } from "@contentstack/management/types/stack/taxonomy";
+import { Song } from "@/types/contentStack/generated";
+import { QueryOperation } from "@contentstack/delivery-sdk";
 
 /**
  *
@@ -20,35 +20,13 @@ export const getSongs = async (): Promise<Song[] | undefined> => {
 };
 
 /**
- * The below type extends the Song type to include reference data
- * for artists and albums, allowing us to fetch additional information
- * related to each song.
- */
-type ArtistData = {
-  uid?: string;
-  title?: string;
-  url?: string;
-  rte_synopsis?: Artist["rte_synopsis"];
-};
-
-type AlbumData = Album & {
-  uid?: string;
-  taxonomies?: TaxonomyData[];
-};
-
-export type SongWithReferenceData = Song & {
-  reference_artist?: ArtistData[];
-  reference_album?: AlbumData[];
-};
-
-/**
  *
  * @returns A list of songs with their associated album data.
  * This function fetches all entries of the "song" content type and includes
  * the album data by resolving the reference to the album UID.
  */
 export const getSongsWithReferenceData = async (): Promise<
-  SongWithReferenceData[] | undefined
+  Song[] | undefined
 > => {
   try {
     const response = await DeliveryClient.contentType("song")
@@ -56,10 +34,36 @@ export const getSongsWithReferenceData = async (): Promise<
       .includeMetadata()
       .includeReference("reference_artist")
       .includeReference("reference_album")
-      .find<SongWithReferenceData>();
+      .find<Song>();
     return response.entries || [];
   } catch (error) {
     console.error("Error fetching songs with album data:", error);
     return [];
+  }
+};
+
+/**
+ *
+ * @param slug The slug of the song to fetch.
+ * The slug is typically the URL-friendly version of the song's name.
+ * For example, "humble" for the name "HUMBLE."
+ * @returns
+ */
+export const getSongByName = async (
+  slug: string
+): Promise<Song | undefined> => {
+  console.log("Fetching artist by slug:", slug);
+
+  try {
+    const query = await DeliveryClient.contentType("artist")
+      .entry()
+      .includeMetadata()
+      .query()
+      .where("url", QueryOperation.MATCHES, slug)
+      .find<Song>();
+    return query?.entries?.[0] ?? undefined;
+  } catch (error) {
+    console.error(`Error fetching song by slug "${slug}":`, error);
+    return undefined;
   }
 };

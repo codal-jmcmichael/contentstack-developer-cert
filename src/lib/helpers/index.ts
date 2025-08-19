@@ -1,2 +1,3 @@
 export { toSnakeCase } from "./toSnakeCase";
-export { hasReferencedEntryType } from "./typeHandlers";
+export { isAlbum, isArtist, isSongWithReferenceData } from "./typeHandlers";
+export type { SongWithReferenceData } from "./typeHandlers";

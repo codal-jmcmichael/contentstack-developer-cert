@@ -1,4 +1,4 @@
 export { getAlbumByUid, getAlbums } from "./albums";
 export { getArtistByName, getArtists } from "./artists";
-export { getGenres } from "./genres";
-export { getSongs, getSongsWithReferenceData } from "./songs";
+export { getGenres, getGenreByUid } from "./genres";
+export { getSongs, getSongsWithReferenceData, getSongByName } from "./songs";

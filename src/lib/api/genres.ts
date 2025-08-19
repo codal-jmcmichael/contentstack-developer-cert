@@ -1,5 +1,8 @@
 import { ManagementClient } from "@/lib/clients";
-import { TermData } from "@contentstack/management/types/stack/taxonomy/terms";
+import {
+  Term,
+  TermData,
+} from "@contentstack/management/types/stack/taxonomy/terms";
 
 export type Genre = Pick<TermData, "name" | "uid">;
 
@@ -15,9 +18,8 @@ export const getGenres = async (): Promise<Genre[] | undefined> => {
       .terms()
       .query()
       .find();
-
     return (
-      response.items.map((term) => ({
+      response.items?.map((term) => ({
         name: term.name,
         uid: term.uid,
       })) ?? []
@@ -35,9 +37,7 @@ export const getGenres = async (): Promise<Genre[] | undefined> => {
  * This function fetches the genre term from the Contentstack management API
  * using the provided UID.
  */
-export const getGenreByUid = async (
-  uid: string
-): Promise<TermData | undefined> => {
+export const getGenreByUid = async (uid: string): Promise<Term | undefined> => {
   try {
     const response = await ManagementClient.taxonomy("genres")
       .term()

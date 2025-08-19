@@ -1,5 +1,6 @@
 import { DeliveryClient } from "@/lib/clients";
 import { Artist } from "@/types/contentStack/generated";
+import { QueryOperation } from "@contentstack/delivery-sdk";
 
 /**
  *
@@ -13,16 +14,11 @@ export const getArtists = async (): Promise<Artist[] | undefined> => {
       .entry()
       .includeMetadata()
       .find<Artist>();
-
     return response.entries ?? [];
   } catch (error) {
     console.error("Error fetching artists:", error);
     return [];
   }
-};
-
-type ArtistData = Artist & {
-  uid: string;
 };
 
 /**
@@ -33,23 +29,17 @@ type ArtistData = Artist & {
  * @returns
  */
 export const getArtistByName = async (
-  slug: ArtistData["url"]
-): Promise<ArtistData | undefined> => {
+  slug: string
+): Promise<Artist | undefined> => {
   try {
-    /*
-     * The .regex() method is used here to match the slug within the
-     * URL field of the artist entries. We're just matching the
-     * "kendrick-lamar" part of "/artists/kendrick-lamar" to keep the
-     * "/artists/..." prefix flexible.
-     */
     const query = await DeliveryClient.contentType("artist")
       .entry()
       .includeMetadata()
       .query()
-      .regex("url", slug)
-      .find<ArtistData>();
-
-    return query?.entries?.[0] ?? undefined;
+      .where("url", QueryOperation.MATCHES, slug)
+      .find<Artist>();
+    const result = query?.entries?.[0];
+    return result ?? undefined;
   } catch (error) {
     console.error(`Error fetching artist by slug "${slug}":`, error);
     return undefined;

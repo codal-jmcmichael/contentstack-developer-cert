@@ -1,6 +1,6 @@
 import { DeliveryClient } from "@/lib/clients";
 import type { Album } from "@/types/contentStack/generated";
-import { Entry } from "@contentstack/delivery-sdk";
+import { QueryOperation } from "@contentstack/delivery-sdk";
 
 /**
  *
@@ -28,10 +28,15 @@ export const getAlbums = async (): Promise<Album[] | undefined> => {
  */
 export const getAlbumByUid = async (
   uid: string
-): Promise<Entry | undefined> => {
+): Promise<Album | undefined> => {
   try {
-    const response = await DeliveryClient.contentType("album").entry(uid);
-    return response || undefined;
+    const response = await DeliveryClient.contentType("album")
+      .entry()
+      .includeMetadata()
+      .query()
+      .where("uid", QueryOperation.MATCHES, uid)
+      .find<Album>();
+    return response?.entries?.[0] ?? undefined;
   } catch (error) {
     console.error(`Error fetching album by UID "${uid}":`, error);
     return undefined;

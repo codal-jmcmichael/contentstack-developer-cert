@@ -1,35 +1,47 @@
 "use client";
 
 import { useHomePageContext } from "@/contexts/HomePageProvider";
-import { toSnakeCase } from "@/lib/helpers";
-import { SongWithReferenceData } from "@/lib/api/songs";
+import {
+  isSongWithReferenceData,
+  SongWithReferenceData,
+  toSnakeCase,
+} from "@/lib/helpers";
+import { Song, TaxonomyEntry } from "@/types/contentStack/generated";
 import Image from "next/image";
 import Link from "next/link";
 
 export interface SongsListProps {
-  songs: SongWithReferenceData[];
+  songs: Song[];
 }
 
 const SongsList = (props: SongsListProps) => {
   const { songs } = props;
   const { selectedGenre } = useHomePageContext();
 
-  console.log("SongsList songs:", songs);
+  const songsWithData: SongWithReferenceData[] = songs.filter(
+    isSongWithReferenceData
+  );
 
-  if (!songs || songs.length === 0) {
+  if (songsWithData.length === 0) {
     return <p>No songs found.</p>;
   }
 
-  let filteredSongs = songs;
-  if (selectedGenre !== "all") {
-    filteredSongs = selectedGenre
-      ? songs.filter(
-          (song) =>
-            song?.reference_album?.[0]?.taxonomies?.[0]?.term_uid ===
-            toSnakeCase(selectedGenre)
-        )
-      : songs;
-  }
+  const filteredSongs =
+    selectedGenre === "all"
+      ? songsWithData
+      : songsWithData.filter((song) => {
+          const targetTerm = toSnakeCase(selectedGenre);
+          const taxonomies = song.reference_album?.[0]?.taxonomies;
+
+          if (!taxonomies) return false;
+
+          const taxArray = Array.isArray(taxonomies)
+            ? taxonomies
+            : [taxonomies];
+          return taxArray.some(
+            (tax) => (tax as TaxonomyEntry).term_uid === targetTerm
+          );
+        });
 
   if (filteredSongs.length === 0) {
     return <p>No songs found for the selected genre.</p>;
@@ -37,12 +49,14 @@ const SongsList = (props: SongsListProps) => {
 
   return (
     <ul className="flex flex-col gap-3">
-      {filteredSongs?.map((song, index) => {
-        const albumCoverSrc = song?.reference_album?.[0]?.cover_art?.url || "";
-        const songTitle = song.title || "Unknown Title";
-        const artistTitle =
-          song?.reference_artist?.[0]?.title || "Unknown Artist";
-        const artistUrl = song?.reference_artist?.[0]?.url || "";
+      {filteredSongs.map((song, index) => {
+        const album = song.reference_album![0];
+        const artist = song.reference_artist![0];
+
+        const albumCoverSrc = album.cover_art?.url;
+        const songTitle = song.title;
+        const artistTitle = artist.title;
+        const artistUrl = artist.url;
 
         return (
           <li className="flex items-center gap-4" key={`${songTitle}-${index}`}>
