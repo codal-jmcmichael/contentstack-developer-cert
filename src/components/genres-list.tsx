@@ -14,13 +14,13 @@ const GenresList = (props: GenresListProps) => {
   const { genres } = props;
   const { selectedGenre, setSelectedGenre } = useHomePageContext();
 
-  if (!genres || genres.length === 0) {
-    return <p>No genres found.</p>;
-  }
-
   useEffect(() => {
     if (!selectedGenre) setSelectedGenre(genres[0].name);
   }, [genres]);
+
+  if (!genres || genres.length === 0) {
+    return <p>No genres found.</p>;
+  }
 
   return (
     <div>
