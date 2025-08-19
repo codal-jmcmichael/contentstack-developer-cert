@@ -4,9 +4,9 @@ import { Song } from "@/types/contentStack/generated";
 export default async function SongsPage({
   params,
 }: {
-  params: { slug: Song["url"] };
+  params: Promise<{ slug: Song["url"] }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const song = await getSongByName(slug);
 
   if (!song) {
@@ -20,7 +20,7 @@ export default async function SongsPage({
   const songDescription = song.description;
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <>
       <h1 className="text-2xl font-bold">{song?.title}</h1>
       {songDescription && (
         <div
@@ -28,6 +28,6 @@ export default async function SongsPage({
           dangerouslySetInnerHTML={{ __html: songDescription }}
         ></div>
       )}
-    </div>
+    </>
   );
 }

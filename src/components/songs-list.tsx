@@ -55,27 +55,34 @@ const SongsList = (props: SongsListProps) => {
 
         const albumCoverSrc = album.cover_art?.url;
         const songTitle = song.title;
+        const songUrl = song.url;
         const artistTitle = artist.title;
         const artistUrl = artist.url;
 
         return (
-          <li className="flex items-center gap-4" key={`${songTitle}-${index}`}>
+          <li key={`${songTitle}-${index}`} className="flex items-center gap-4">
             {albumCoverSrc && (
               <Image
-                src={`${albumCoverSrc}?width=300&height=300`}
+                src={`${albumCoverSrc}?width=200&height=200`}
                 alt={songTitle}
                 width={72}
                 height={72}
                 className="rounded"
+                priority
               />
             )}
+
             <div className="flex flex-col gap-1">
-              <p className="text-lg">{songTitle}</p>
+              {songUrl ? (
+                <Link href={songUrl} className="text-lg hover:underline">
+                  {songTitle}
+                </Link>
+              ) : (
+                <p className="text-lg">{songTitle}</p>
+              )}
+
               {artistUrl ? (
-                <Link
-                  className="text-sm underline hover:no-underline"
-                  href={artistUrl}
-                >
+                <Link className="text-sm hover:underline" href={artistUrl}>
                   {artistTitle}
                 </Link>
               ) : (

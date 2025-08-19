@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <HomePageProvider>
-      <div className="font-sans flex flex-col items-stretch justify-stretch gap-8">
+      <>
         <div className="flex flex-wrap gap-3">
           <GenresList genres={genres} />
         </div>
@@ -20,7 +20,7 @@ export default async function Home() {
         <div className="flex flex-wrap items-start gap-3">
           <SongsList songs={songs} />
         </div>
-      </div>
+      </>
     </HomePageProvider>
   );
 }

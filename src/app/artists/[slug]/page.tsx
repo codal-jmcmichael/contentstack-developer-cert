@@ -5,9 +5,9 @@ import { jsonToHtml } from "@contentstack/json-rte-serializer";
 export default async function ArtistsPage({
   params,
 }: {
-  params: { slug: Artist["url"] };
+  params: Promise<{ slug: Artist["url"] }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
   const artist = await getArtistByName(slug);
 
   if (!artist) {

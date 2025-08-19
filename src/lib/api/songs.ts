@@ -52,10 +52,8 @@ export const getSongsWithReferenceData = async (): Promise<
 export const getSongByName = async (
   slug: string
 ): Promise<Song | undefined> => {
-  console.log("Fetching artist by slug:", slug);
-
   try {
-    const query = await DeliveryClient.contentType("artist")
+    const query = await DeliveryClient.contentType("song")
       .entry()
       .includeMetadata()
       .query()
