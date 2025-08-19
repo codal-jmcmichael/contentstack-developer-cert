@@ -19,8 +19,14 @@ const GenresList = (props: GenresListProps) => {
   }
 
   useEffect(() => {
-    if (!selectedGenre) setSelectedGenre(genres[0].name);
-  }, [genres]);
+    console.log("GenresList genres:", genres);
+    console.log("Selected genre:", selectedGenre);
+  }, [genres, selectedGenre]);
+
+  //   useEffect(() => {
+
+  //     if (!selectedGenre) setSelectedGenre(genres[0].name);
+  //   }, [genres]);
 
   return (
     <div>

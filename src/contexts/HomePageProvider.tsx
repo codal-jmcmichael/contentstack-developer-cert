@@ -1,5 +1,6 @@
 "use client";
 
+import { toSnakeCase } from "@/lib/helpers";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface HomePageContextProps {
@@ -18,7 +19,7 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   >(null);
 
   const handleSetSelectedGenre = (genre: string | null) => {
-    setSelectedGenre(genre ? genre.toLowerCase() : null);
+    setSelectedGenre(genre ? toSnakeCase(genre) : null);
   };
 
   return (

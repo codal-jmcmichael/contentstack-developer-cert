@@ -68,6 +68,8 @@ export interface Song {
   description?: string;
   /** Lyrics */
   lyrics?: string;
+  /** Reference (Artist) */
+  reference_artist?: (Artist | ReferencedEntry)[];
   /** Reference (Album) */
   reference_album?: (Album | ReferencedEntry)[];
 }
@@ -83,8 +85,6 @@ export interface Album {
   release_date?: string | null;
   /** Cover Art */
   cover_art?: File | null;
-  /** Reference (Artist) */
-  reference_artist: (Artist | ReferencedEntry)[];
   /** Genres */
   taxonomies?: Taxonomy[];
 }
