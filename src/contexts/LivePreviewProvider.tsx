@@ -1,25 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
-import ContentstackLivePreview from "@contentstack/live-preview-utils";
+import { initLivePreview } from "@/lib/clients";
 
 export const LivePreviewProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const options = {
-    enable: process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT !== "production",
-    cleanCslpOnProduction:
-      process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT === "production",
-    ssr: true,
-    environment: process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT,
-  };
+  const livePreviewEnabled =
+    process.env.NEXT_PUBLIC_NEXT_PUBLIC_CONTENTSTACK_LIVE_PREVIEW;
 
   useEffect(() => {
-    ContentstackLivePreview.init(options);
-    console.log("Live Preview initialized");
-  }, []);
+    if (livePreviewEnabled === "true") {
+      initLivePreview();
+    }
+  }, [livePreviewEnabled]);
 
   return <>{children}</>;
 };

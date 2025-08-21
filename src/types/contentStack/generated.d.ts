@@ -81,6 +81,12 @@ export interface JSONRTENode {
   };
 }
 
+export interface CSLPAttribute {
+  "data-cslp"?: string;
+  "data-cslp-parent-field"?: string;
+}
+export type CSLPFieldMapping = CSLPAttribute | string;
+
 export interface SystemFields {
   uid?: string;
   created_at?: string;
@@ -97,53 +103,89 @@ export interface SystemFields {
   title?: string;
 }
 
-export interface Song extends SystemFields {
-  /** Version */
+export interface ModularBlocks extends SystemFields {
+  songs: {
+    songs_reference?: (Song | ReferencedEntry)[];
+    $?: {
+      songs_reference?: CSLPFieldMapping;
+    };
+  };
+  artists: {
+    artists_reference?: (Artist | ReferencedEntry)[];
+    $?: {
+      artists_reference?: CSLPFieldMapping;
+    };
+  };
+  albums: {
+    albums_reference?: (Album | ReferencedEntry)[];
+    $?: {
+      albums_reference?: CSLPFieldMapping;
+    };
+  };
+}
+
+export interface Page extends SystemFields {
   _version?: number;
-  /** Title */
   title: string;
-  /** URL */
   url: string;
-  /** Description */
+  modular_blocks?: ModularBlocks[];
+  $?: {
+    title?: CSLPFieldMapping;
+    url?: CSLPFieldMapping;
+    modular_blocks?: CSLPFieldMapping;
+  };
+}
+
+export interface Song extends SystemFields {
+  _version?: number;
+  title: string;
+  url: string;
   description?: string;
-  /** Lyrics */
   lyrics?: string;
-  /** Reference (Artist) */
   reference_artist?: (Artist | ReferencedEntry)[];
-  /** Reference (Album) */
   reference_album?: (Album | ReferencedEntry)[];
+  $?: {
+    title?: CSLPFieldMapping;
+    url?: CSLPFieldMapping;
+    description?: CSLPFieldMapping;
+    lyrics?: CSLPFieldMapping;
+    reference_artist?: CSLPFieldMapping;
+    reference_album?: CSLPFieldMapping;
+  };
 }
 
 export interface Album extends SystemFields {
-  /** Version */
   _version?: number;
-  /** Title */
   title: string;
-  /** URL */
   url?: string;
-  /** Release Date */
   release_date?: string | null;
-  /** Cover Art */
   cover_art?: File | null;
-  /** Taxonomies */
   taxonomies?: Taxonomy | TaxonomyEntry[];
+  $?: {
+    title?: CSLPFieldMapping;
+    url?: CSLPFieldMapping;
+    release_date?: CSLPFieldMapping;
+    cover_art?: CSLPFieldMapping;
+    taxonomies?: CSLPFieldMapping;
+  };
 }
 
 export interface Artist extends SystemFields {
-  /** Version */
   _version?: number;
-  /** Name */
   title: string;
-  /** URL */
   url: string;
-  /** Featured Image */
   featured_image?: File | null;
-  /** Synopsis (Rich Text) */
   rte_synopsis?: {
     type: string;
     uid: string;
     _version: number;
     attrs: Record<string, any>;
     children: JSONRTENode[];
+  };
+  $?: {
+    title?: CSLPFieldMapping;
+    url?: CSLPFieldMapping;
+    featured_image?: CSLPFieldMapping;
+    rte_synopsis?: CSLPFieldMapping;
   };
 }
