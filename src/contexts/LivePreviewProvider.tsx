@@ -8,8 +8,7 @@ export const LivePreviewProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const livePreviewEnabled =
-    process.env.NEXT_PUBLIC_NEXT_PUBLIC_CONTENTSTACK_LIVE_PREVIEW;
+  const livePreviewEnabled = process.env.NEXT_PUBLIC_CONTENTSTACK_LIVE_PREVIEW;
 
   useEffect(() => {
     if (livePreviewEnabled === "true") {
