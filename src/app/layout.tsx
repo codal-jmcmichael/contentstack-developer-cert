@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { LivePreviewProvider } from "@/contexts/LivePreviewProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,14 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-slate-950 text-slate-50 antialiased`}
-      >
-        <main className="min-h-screen flex flex-col items-start justify-center gap-8 max-w-1/2 m-auto">
-          {children}
-        </main>
-      </body>
-    </html>
+    <LivePreviewProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} bg-slate-950 text-slate-50 antialiased`}
+        >
+          <main className="min-h-screen flex flex-col items-start justify-center gap-8 max-w-1/2 m-auto">
+            {children}
+          </main>
+        </body>
+      </html>
+    </LivePreviewProvider>
   );
 }

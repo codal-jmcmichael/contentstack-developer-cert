@@ -7,7 +7,7 @@ import contentstack, { StackConfig } from "@contentstack/delivery-sdk";
 const requiredEnvVars = [
   "CONTENTSTACK_API_KEY",
   "CONTENTSTACK_DELIVERY_TOKEN",
-  "CONTENTSTACK_ENVIRONMENT",
+  "NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT",
   "CONTENTSTACK_PREVIEW_TOKEN",
   "CONTENTSTACK_PREVIEW_HOST",
 ];
@@ -23,7 +23,7 @@ for (const envVar of requiredEnvVars) {
 const stackOptions: StackConfig = {
   apiKey: process.env.CONTENTSTACK_API_KEY!,
   deliveryToken: process.env.CONTENTSTACK_DELIVERY_TOKEN!,
-  environment: process.env.CONTENTSTACK_ENVIRONMENT!,
+  environment: process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT!,
   branch: process.env.CONTENTSTACK_BRANCH || "main",
   live_preview: {
     enable: process.env.CONTENTSTACK_LIVE_PREVIEW === "true",
