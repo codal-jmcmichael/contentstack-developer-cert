@@ -9,6 +9,7 @@ const stackOptions: StackConfig = {
     enable: process.env.NEXT_PUBLIC_CONTENTSTACK_LIVE_PREVIEW === "true",
     host: process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_HOST!,
     preview_token: process.env.NEXT_PUBLIC_CONTENTSTACK_PREVIEW_TOKEN!,
+    management_token: process.env.NEXT_PUBLIC_CONTENTSTACK_MANAGEMENT_TOKEN!,
   },
 };
 

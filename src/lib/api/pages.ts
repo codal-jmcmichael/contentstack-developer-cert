@@ -1,6 +1,7 @@
 import { DeliveryClient } from "@/lib/clients";
 import { Page } from "@/types/contentStack/generated";
-import contentstack, { QueryOperation } from "@contentstack/delivery-sdk";
+import { QueryOperation } from "@contentstack/delivery-sdk";
+import { addEditableTags } from "@contentstack/utils";
 
 type PageWithUid = Page & { uid: string };
 
@@ -29,7 +30,7 @@ export const getPageByUrl = async (url: string): Promise<Page | undefined> => {
         entry &&
         process.env.NEXT_PUBLIC_CONTENTSTACK_LIVE_PREVIEW === "true"
       ) {
-        contentstack.Utils.addEditableTags(entry, "page", true);
+        addEditableTags(entry, "page", true);
       }
     }
 

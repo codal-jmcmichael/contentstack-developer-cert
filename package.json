@@ -16,6 +16,7 @@
     "@contentstack/json-rte-serializer": "^3.0.3",
     "@contentstack/live-preview-utils": "^3.4.0",
     "@contentstack/management": "^1.23.2",
+    "@contentstack/utils": "^1.4.1",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <LivePreviewProvider>
+    <>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} bg-slate-950 text-slate-50 antialiased`}
@@ -34,6 +34,7 @@ export default function RootLayout({
           </main>
         </body>
       </html>
-    </LivePreviewProvider>
+      <LivePreviewProvider />
+    </>
   );
 }
