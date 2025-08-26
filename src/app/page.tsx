@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 import { GenresList, SongsList } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
-import { getAllGenres, getPageByUrl, getSongsWithReferenceData } from "@/lib/api";
+import { getAllGenres, getPageByUrl } from "@/lib/api";
 import { DeliveryClient } from "@/lib/clients";
 import { Page } from "@/types/contentStack/generated";
 
@@ -25,10 +25,9 @@ export default async function Home({
 
   const page = await getPageByUrl("/");
 
-  const songs = await getSongsWithReferenceData();
   const genres = await getAllGenres() || [];
 
-  if (!songs || !genres) {
+  if (!genres) {
     return <div>Error loading data</div>;
   }
 
@@ -49,7 +48,7 @@ export default async function Home({
         </div>
 
         <div className="flex flex-wrap items-start gap-3">
-          <SongsList songs={songs} />
+          <SongsList />
         </div>
       </>
     </HomePageProvider>

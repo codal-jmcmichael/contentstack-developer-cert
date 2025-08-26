@@ -14,31 +14,27 @@ const GenresList = (props: GenresListProps) => {
   const { genres } = props;
   const { selectedGenre, setSelectedGenre } = useHomePageContext();
 
-  useEffect(() => {
-    console.log(selectedGenre);
-  }, [selectedGenre])
-
   if (!genres || genres.length === 0) {
     return <p>No genres found.</p>;
   }
 
-
   return (
     <div>
       <ul className="flex gap-3">
-        {genres?.length && <Button
-          key="all"
-          variant={selectedGenre === "all" ? "default" : "secondary"}
-          onClick={() => setSelectedGenre("all")}
-          asChild
-        >
-          <Badge
-            variant={selectedGenre === "all" ? "default" : "secondary"}
-            className="text-lg"
+        {genres?.length &&
+          <Button
+            key="all"
+            variant={selectedGenre === null ? "default" : "secondary"}
+            onClick={() => setSelectedGenre(null)}
+            asChild
           >
-            All
-          </Badge>
-        </Button>}
+            <Badge
+              variant={selectedGenre === null ? "default" : "secondary"}
+              className="text-lg"
+            >
+              All
+            </Badge>
+          </Button>}
 
         {genres?.map((genre) => (
           <Button

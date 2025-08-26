@@ -5,46 +5,31 @@ import {
   isSongWithReferenceData,
   SongWithReferenceData,
 } from "@/lib/helpers";
-import { Song, TaxonomyEntry } from "@/types/contentStack/generated";
+import { Song } from "@/types/contentStack/generated";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 
-export interface SongsListProps {
-  songs: Song[];
-}
+const SongsList = () => {
+  const { songs } = useHomePageContext();
 
-const SongsList = (props: SongsListProps) => {
-  const { songs } = props;
-  const { selectedGenre } = useHomePageContext();
+  useEffect(() => {
+    console.log(songs);
+  }, [songs]);
 
-  const songsWithData: SongWithReferenceData[] = songs.filter(
-    isSongWithReferenceData
-  );
-
-  if (songsWithData.length === 0) {
-    return <p>No songs found.</p>;
+  if (!songs?.length) {
+    return <p>No songs found!</p>
   }
-
-  return;
 
   return (
     <ul className="flex flex-col gap-3">
       {songs.map((song, index) => {
-        const album = song.reference_album![0];
-        const artist = song.reference_artist![0];
-
-        const albumCoverSrc = album.cover_art?.url;
-        const songTitle = song.title;
-        const songUrl = song.url;
-        const artistTitle = artist.title;
-        const artistUrl = artist.url;
-
         return (
-          <li key={`${songTitle}-${index}`} className="flex items-center gap-4">
-            {albumCoverSrc && (
+          <li key={`${song.title}-${index}`} className="flex items-center gap-4">
+            {song.reference_album?.[0]?.cover_art?.url && (
               <Image
-                src={`${albumCoverSrc}?width=200&height=200`}
-                alt={songTitle}
+                src={`${song.reference_album?.[0]?.cover_art?.url}?width=200&height=200`}
+                alt={song.title}
                 width={72}
                 height={72}
                 className="rounded"
@@ -53,20 +38,20 @@ const SongsList = (props: SongsListProps) => {
             )}
 
             <div className="flex flex-col gap-1">
-              {songUrl ? (
-                <Link href={songUrl} className="text-lg hover:underline">
-                  {songTitle}
+              {song.url ? (
+                <Link href={song.url} className="text-lg hover:underline">
+                  {song.title}
                 </Link>
               ) : (
-                <p className="text-lg">{songTitle}</p>
+                <p className="text-lg">{song.title}</p>
               )}
 
-              {artistUrl ? (
-                <Link className="text-sm hover:underline" href={artistUrl}>
-                  {artistTitle}
+              {song.reference_artist?.[0]?.title ? (
+                <Link className="text-sm hover:underline" href={song.reference_artist?.[0]?.url}>
+                  {song.reference_artist?.[0]?.title}
                 </Link>
               ) : (
-                <span className="text-sm">{artistTitle}</span>
+                <span className="text-sm">{song.reference_artist?.[0]?.title}</span>
               )}
             </div>
           </li>
