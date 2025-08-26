@@ -57,16 +57,44 @@ Create the following content types:
 Content types will be automatically generated via the
 `pregen` script each time `npm run dev` is executed.
 
-### Development
+### First Time Setup 
 
 1. Install dependencies
 
 ```bash
-npm install
+pnpm install
 ```
+
+2. Install ContentStack CLI
+
+```bash
+npm install -g @contentstack/cli
+```
+
+3. Install tsgen plugin
+
+```bash
+csdx plugins:install contentstack-cli-tsgen
+```
+
+4. Add delivery token as an alias to the CLI 
+
+```bash
+csdx auth:tokens:add --delivery
+```
+
+5. Select a region
+
+```bash
+csdx config:set:region
+```
+
+### Development
 
 1. Run the project
 
 ```bash
-npm run dev
+pnpm dev
 ```
+
+Content types will be generated in a `generated.d.ts` file for you at runtime
