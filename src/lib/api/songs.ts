@@ -1,6 +1,6 @@
 import { DeliveryClient } from "@/lib/clients";
 import { Song } from "@/types/contentStack/generated";
-import { QueryOperation } from "@contentstack/delivery-sdk";
+import { QueryOperation, TaxonomyQueryOperation } from "@contentstack/delivery-sdk";
 
 /**
  *
@@ -65,3 +65,26 @@ export const getSongByName = async (
     return undefined;
   }
 };
+
+/**
+ * @param genre The genre associated with the song.
+ * `Genre` is a taxonomy term used to categorize music and includes
+ * sub-genres (e.g. `Indie`, `Rock`, `Hip-Hop`, etc.)
+ *
+ * @returns A nested array of entries including the given term
+ * and its sub-terms
+ */
+export const getSongsByGenre = async (
+  genre: string
+): Promise<Song[] | undefined> => {
+  try {
+    const response = await DeliveryClient.taxonomy()
+      .where("taxonomies.music", TaxonomyQueryOperation.EQ_BELOW, genre)
+      .find<Song[]>();
+    return response?.entries?.[0] ?? [];
+  } catch (error) {
+    console.error(`Error fetching songs by ${genre}: `, error);
+    return [];
+  }
+};
+

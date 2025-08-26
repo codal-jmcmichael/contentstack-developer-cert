@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 
 import { GenresList, SongsList } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
-import { getGenres, getPageByUrl, getSongsWithReferenceData } from "@/lib/api";
+import { getAllGenres, getPageByUrl, getSongsWithReferenceData } from "@/lib/api";
 import { DeliveryClient } from "@/lib/clients";
 import { Page } from "@/types/contentStack/generated";
 
@@ -25,7 +25,7 @@ export default async function Home({
   const page = await getPageByUrl("/");
 
   const songs = await getSongsWithReferenceData();
-  const genres = await getGenres();
+  const genres = await getAllGenres() || [];
 
   if (!songs || !genres) {
     return <div>Error loading data</div>;

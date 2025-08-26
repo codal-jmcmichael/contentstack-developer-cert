@@ -8,13 +8,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "cs:generate-types": "csdx tsgen -a 'main_delivery_token' -o 'src/types/contentStack/generated.d.ts' --no-doc --include-system-fields --include-referenced-entry --include-editable-tags",
+    "cs:generate-types": "csdx tsgen -a 'delivery_token' -o 'src/types/contentStack/generated.d.ts' --no-doc --include-system-fields --include-referenced-entry --include-editable-tags",
     "export:stack": "dotenv -e .env.local -- bash -c 'csdx cm:stacks:export -k $NEXT_PUBLIC_CONTENTSTACK_API_KEY -d $CONTENTSTACK_DEST_DIR'"
   },
   "dependencies": {
     "@contentstack/delivery-sdk": "^4.8.0",
     "@contentstack/json-rte-serializer": "^3.0.3",
-    "@contentstack/live-preview-utils": "^3.4.0",
+    "@contentstack/live-preview-utils": "3",
     "@contentstack/management": "^1.23.2",
     "@contentstack/utils": "^1.4.1",
     "@radix-ui/react-slot": "^1.2.3",

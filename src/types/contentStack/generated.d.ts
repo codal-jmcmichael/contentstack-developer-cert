@@ -122,6 +122,12 @@ export interface ModularBlocks extends SystemFields {
       albums_reference?: CSLPFieldMapping;
     };
   };
+  genres: {
+    genres_reference?: (Genre | ReferencedEntry)[];
+    $?: {
+      genres_reference?: CSLPFieldMapping;
+    };
+  };
 }
 
 export interface Page extends SystemFields {

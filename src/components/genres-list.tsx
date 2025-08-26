@@ -15,7 +15,7 @@ const GenresList = (props: GenresListProps) => {
   const { selectedGenre, setSelectedGenre } = useHomePageContext();
 
   useEffect(() => {
-    if (!selectedGenre) setSelectedGenre(genres[0].name);
+    if (!selectedGenre && genres.length) setSelectedGenre(genres[0].name);
   }, [genres]);
 
   if (!genres || genres.length === 0) {
