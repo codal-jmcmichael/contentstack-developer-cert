@@ -4,7 +4,6 @@ import { useHomePageContext } from "@/contexts/HomePageProvider";
 import {
   isSongWithReferenceData,
   SongWithReferenceData,
-  toSnakeCase,
 } from "@/lib/helpers";
 import { Song, TaxonomyEntry } from "@/types/contentStack/generated";
 import Image from "next/image";
@@ -26,30 +25,11 @@ const SongsList = (props: SongsListProps) => {
     return <p>No songs found.</p>;
   }
 
-  const filteredSongs =
-    selectedGenre === "all"
-      ? songsWithData
-      : songsWithData.filter((song) => {
-          const targetTerm = toSnakeCase(selectedGenre);
-          const taxonomies = song.reference_album?.[0]?.taxonomies;
-
-          if (!taxonomies) return false;
-
-          const taxArray = Array.isArray(taxonomies)
-            ? taxonomies
-            : [taxonomies];
-          return taxArray.some(
-            (tax) => (tax as TaxonomyEntry).term_uid === targetTerm
-          );
-        });
-
-  if (filteredSongs.length === 0) {
-    return <p>No songs found for the selected genre.</p>;
-  }
+  return;
 
   return (
     <ul className="flex flex-col gap-3">
-      {filteredSongs.map((song, index) => {
+      {songs.map((song, index) => {
         const album = song.reference_album![0];
         const artist = song.reference_artist![0];
 

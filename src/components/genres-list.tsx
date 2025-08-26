@@ -3,11 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useHomePageContext } from "@/contexts/HomePageProvider";
-import { Genre } from "@/lib/api/genres";
+import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
 import { useEffect } from "react";
 
 interface GenresListProps {
-  genres: Genre[];
+  genres: Term[];
 }
 
 const GenresList = (props: GenresListProps) => {
@@ -15,25 +15,40 @@ const GenresList = (props: GenresListProps) => {
   const { selectedGenre, setSelectedGenre } = useHomePageContext();
 
   useEffect(() => {
-    if (!selectedGenre && genres.length) setSelectedGenre(genres[0].name);
-  }, [genres]);
+    console.log(selectedGenre);
+  }, [selectedGenre])
 
   if (!genres || genres.length === 0) {
     return <p>No genres found.</p>;
   }
 
+
   return (
     <div>
       <ul className="flex gap-3">
-        {genres?.map((genre, index) => (
+        {genres?.length && <Button
+          key="all"
+          variant={selectedGenre === "all" ? "default" : "secondary"}
+          onClick={() => setSelectedGenre("all")}
+          asChild
+        >
+          <Badge
+            variant={selectedGenre === "all" ? "default" : "secondary"}
+            className="text-lg"
+          >
+            All
+          </Badge>
+        </Button>}
+
+        {genres?.map((genre) => (
           <Button
-            key={`${genre.uid}-${index}`}
-            variant={selectedGenre === genre.uid ? "default" : "secondary"}
+            key={genre.uid}
+            variant={selectedGenre === genre.name ? "default" : "secondary"}
             onClick={() => setSelectedGenre(genre.name)}
             asChild
           >
             <Badge
-              variant={selectedGenre === genre.uid ? "default" : "secondary"}
+              variant={selectedGenre === genre.name ? "default" : "secondary"}
               className="text-lg"
             >
               {genre.name}

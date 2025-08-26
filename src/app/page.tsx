@@ -14,6 +14,7 @@ export default async function Home({
   await headers();
   let { live_preview, entry_uid, content_type_uid } = await searchParams;
 
+  // TODO: Add this to middleware
   if (live_preview) {
     DeliveryClient.livePreviewQuery({
       live_preview,

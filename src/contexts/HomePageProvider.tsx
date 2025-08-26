@@ -16,10 +16,10 @@ const HomePageContext = createContext<HomePageContextProps | undefined>(
 export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGenre, setSelectedGenre] = useState<
     HomePageContextProps["selectedGenre"] | null
-  >(null);
+  >("all");
 
   const handleSetSelectedGenre = (genre: string | null) => {
-    setSelectedGenre(genre ? toSnakeCase(genre) : null);
+    setSelectedGenre(genre);
   };
 
   return (
