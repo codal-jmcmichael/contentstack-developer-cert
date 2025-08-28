@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 
-import { GenresList, SongsList } from "@/components";
+import { GenresList, SongsList, SearchInput } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
 import { getAllGenres, getPageByUrl } from "@/lib/api";
 import { DeliveryClient } from "@/lib/clients";
@@ -42,6 +42,8 @@ export default async function Home({
             {page?.title}
           </h1>
         ) : null}
+
+        <SearchInput />
 
         <div className="flex flex-wrap gap-3">
           <GenresList genres={genres} />

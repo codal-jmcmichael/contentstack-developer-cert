@@ -1,13 +1,15 @@
 "use client";
 
-import { getSongsByGenre } from "@/lib/api";
+import { getSongsByNameOrLyrics } from "@/lib/api";
 import { Song } from "@/types/contentStack/generated";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface HomePageContextProps {
   songs: Song[] | null;
   selectedGenre: string | null;
   setSelectedGenre: (genre: string | null) => void;
+  searchInput: string | null;
+  setSearchInput: (input: string | null) => void;
 }
 
 const HomePageContext = createContext<HomePageContextProps | undefined>(
@@ -19,15 +21,25 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGenre, setSelectedGenre] = useState<
     HomePageContextProps["selectedGenre"] | null
   >(null);
+  const [searchInput, setSearchInput] = useState<string | null>("");
 
   const handleSetSelectedGenre = async (genre: string | null) => {
     setSelectedGenre(genre);
-    setSongs((await getSongsByGenre(genre || null)) || []);
+    // setSongs((await getSongsByGenre(genre || null)));
   };
+
+  const handleSetSearchInput = async (input: string | null) => {
+    setSongs(await getSongsByNameOrLyrics(input));
+    setSearchInput(input);
+  }
+
+  useEffect(() => {
+    console.log(searchInput);
+  }, [searchInput])
 
   return (
     <HomePageContext.Provider
-      value={{ selectedGenre, setSelectedGenre: handleSetSelectedGenre, songs }}
+      value={{ selectedGenre, setSelectedGenre: handleSetSelectedGenre, songs, searchInput, setSearchInput: handleSetSearchInput }}
     >
       {children}
     </HomePageContext.Provider>

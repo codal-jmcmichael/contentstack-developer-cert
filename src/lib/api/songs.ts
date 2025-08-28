@@ -6,6 +6,32 @@ import {
 } from "@contentstack/delivery-sdk";
 import { toSnakeCase } from "../helpers";
 
+const nameQuery = (name: string) => {
+  return DeliveryClient.contentType("song")
+    .entry()
+    .includeReference("reference_album")
+    .includeReference("reference_artist")
+    .query()
+    .where(
+      "title",
+      QueryOperation.MATCHES,
+      name
+    );
+};
+
+const lyricsQuery = (lyrics: string) => {
+  return DeliveryClient.contentType("song")
+    .entry()
+    .includeReference("reference_album")
+    .includeReference("reference_artist")
+    .query()
+    .where(
+      "lyrics",
+      QueryOperation.MATCHES,
+      lyrics
+    );
+};
+
 /**
  *
  * @param slug The slug of the song to fetch.
@@ -63,3 +89,19 @@ export const getSongsByGenre = async (
     return [];
   }
 };
+
+export const getSongsByNameOrLyrics = async (
+  input: string
+): Promise<Song[] | undefined> => {
+  try {
+    const response = await DeliveryClient.contentType("song")
+      .entry()
+      .query()
+      .or(lyricsQuery(input), nameQuery(input))
+      .find<Song>();
+    return response?.entries ?? [];
+  } catch (error) {
+    console.error(`Error fetching songs with input: ${input}`);
+    return [];
+  }
+}
