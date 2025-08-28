@@ -12,10 +12,10 @@ import React, {
 
 interface HomePageContextProps {
   songs: Song[];
-  selectedGenre: string;
-  setSelectedGenre: (genre: string) => void;
   searchInput: string;
+  selectedGenre: string;
   setSearchInput: (input: string) => void;
+  setSelectedGenre: (genre: string) => void;
 }
 
 const HomePageContext = createContext<HomePageContextProps | undefined>(
@@ -29,15 +29,11 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const fetchSongs = async () => {
-      if (searchInput) {
-        const fetchedSongs = await getSongsByTermsAndGenre(
-          searchInput,
-          selectedGenre
-        );
-        setSongs(fetchedSongs);
-      } else {
-        setSongs([]);
-      }
+      const fetchedSongs = await getSongsByTermsAndGenre(
+        searchInput,
+        selectedGenre
+      );
+      setSongs(fetchedSongs);
     };
 
     fetchSongs();

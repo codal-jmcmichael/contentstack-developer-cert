@@ -12,7 +12,6 @@ export const getAllGenres = async (): Promise<Term[] | undefined> => {
     const response = await ManagementClient.taxonomy("music")
       .terms("genre")
       .descendants();
-    console.log(response);
     return response?.terms || [];
   } catch (error) {
     console.error("Error fetching genres: ", error);

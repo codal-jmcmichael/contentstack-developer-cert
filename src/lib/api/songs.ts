@@ -20,15 +20,18 @@ const lyricsQuery = (lyrics: string) => {
     .where("lyrics", QueryOperation.MATCHES, lyrics);
 };
 
-const genreQuery = (genre: string) => {
+const artistQuery = (artist: string) => {
+  // Define the query instance
+  const query = DeliveryClient.contentType("artist")
+    .entry()
+    .query()
+    .regex("title", artist, "i");
+
+  // Pass the query instance to the whereIn clause
   return DeliveryClient.contentType("song")
     .entry()
     .query()
-    .where(
-      "taxonomies.music",
-      TaxonomyQueryOperation.EQ_BELOW,
-      toSnakeCase(genre)
-    );
+    .whereIn("reference_artist", query);
 };
 
 /**
@@ -56,39 +59,11 @@ export const getSongByName = async (
 };
 
 /**
- * @param genre The genre associated with the song.
- * `Genre` is a taxonomy term used to categorize music and includes
- * sub-genres (e.g. `Indie`, `Rock`, `Hip-Hop`, etc.)
- *
- * @returns A nested array of entries including the given term
- * and its sub-terms
+ * Fetch songs based on search terms and genre.
+ * @param input The search terms to filter songs.
+ * @param genre The genre to filter songs.
+ * @returns A promise that resolves to an array of songs matching the criteria.
  */
-export const getSongsByGenre = async (
-  genre: string | null
-): Promise<Song[] | undefined> => {
-  // If no genre is provided, default to "genre"
-  // which will include all songs in the "genre" taxonomy
-  if (!genre) genre = "genre";
-
-  try {
-    const response = await DeliveryClient.contentType("song")
-      .entry()
-      .includeReference("reference_album")
-      .includeReference("reference_artist")
-      .query()
-      .where(
-        "taxonomies.music",
-        TaxonomyQueryOperation.EQ_BELOW,
-        toSnakeCase(genre)
-      )
-      .find<Song>();
-    return response?.entries ?? [];
-  } catch (error) {
-    console.error(`Error fetching songs by ${genre}: `, error);
-    return [];
-  }
-};
-
 export const getSongsByTermsAndGenre = async (
   input: string,
   genre: string
@@ -107,7 +82,11 @@ export const getSongsByTermsAndGenre = async (
         TaxonomyQueryOperation.EQ_BELOW,
         toSnakeCase(genre || "genre")
       )
-      .or(lyricsQuery(trimmedInput), nameQuery(trimmedInput))
+      .or(
+        lyricsQuery(trimmedInput),
+        nameQuery(trimmedInput),
+        artistQuery(trimmedInput)
+      )
       .find<Song>();
     return response?.entries ?? [];
   } catch (error) {
