@@ -10,21 +10,24 @@ const nameQuery = (name: string) => {
   return DeliveryClient.contentType("song")
     .entry()
     .query()
-    .where(
-      "title",
-      QueryOperation.MATCHES,
-      name
-    );
+    .where("title", QueryOperation.MATCHES, name);
 };
 
 const lyricsQuery = (lyrics: string) => {
   return DeliveryClient.contentType("song")
     .entry()
     .query()
+    .where("lyrics", QueryOperation.MATCHES, lyrics);
+};
+
+const genreQuery = (genre: string) => {
+  return DeliveryClient.contentType("song")
+    .entry()
+    .query()
     .where(
-      "lyrics",
-      QueryOperation.MATCHES,
-      lyrics
+      "taxonomies.music",
+      TaxonomyQueryOperation.EQ_BELOW,
+      toSnakeCase(genre)
     );
 };
 
@@ -86,20 +89,29 @@ export const getSongsByGenre = async (
   }
 };
 
-export const getSongsByNameOrLyrics = async (
-  input: string
-): Promise<Song[] | undefined> => {
+export const getSongsByTermsAndGenre = async (
+  input: string,
+  genre: string
+): Promise<Song[]> => {
+  const trimmedInput = input.trim();
+  if (!trimmedInput) return [];
+
   try {
     const response = await DeliveryClient.contentType("song")
       .entry()
       .includeReference("reference_album")
       .includeReference("reference_artist")
       .query()
-      .or(lyricsQuery(input), nameQuery(input))
+      .where(
+        "taxonomies.music",
+        TaxonomyQueryOperation.EQ_BELOW,
+        toSnakeCase(genre || "genre")
+      )
+      .or(lyricsQuery(trimmedInput), nameQuery(trimmedInput))
       .find<Song>();
     return response?.entries ?? [];
   } catch (error) {
     console.error(`Error fetching songs with input: ${input}`);
     return [];
   }
-}
+};

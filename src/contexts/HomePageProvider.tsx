@@ -1,14 +1,20 @@
 "use client";
 
-import { getSongsByGenre, getSongsByNameOrLyrics } from "@/lib/api";
+import { getSongsByTermsAndGenre } from "@/lib/api";
 import { Song } from "@/types/contentStack/generated";
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface HomePageContextProps {
-  songs: Song[] | null;
-  selectedGenre: string | null;
-  setSelectedGenre: (genre: string | null) => void;
-  searchInput: string | null;
+  songs: Song[];
+  selectedGenre: string;
+  setSelectedGenre: (genre: string) => void;
+  searchInput: string;
   setSearchInput: (input: string) => void;
 }
 
@@ -17,25 +23,35 @@ const HomePageContext = createContext<HomePageContextProps | undefined>(
 );
 
 export const HomePageProvider = ({ children }: { children: ReactNode }) => {
-  const [songs, setSongs] = useState<Song[] | null>(null);
-  const [selectedGenre, setSelectedGenre] = useState<
-    HomePageContextProps["selectedGenre"] | null
-  >(null);
-  const [searchInput, setSearchInput] = useState<string | null>("");
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
 
-  const handleSetSelectedGenre = async (genre: string | null) => {
-    setSelectedGenre(genre);
-    setSongs((await getSongsByGenre(genre) ?? null));
-  };
+  useEffect(() => {
+    const fetchSongs = async () => {
+      if (searchInput) {
+        const fetchedSongs = await getSongsByTermsAndGenre(
+          searchInput,
+          selectedGenre
+        );
+        setSongs(fetchedSongs);
+      } else {
+        setSongs([]);
+      }
+    };
 
-  const handleSetSearchInput = async (input: string) => {
-    setSongs((await getSongsByNameOrLyrics(input)) ?? null);
-    setSearchInput(input);
-  }
+    fetchSongs();
+  }, [searchInput, selectedGenre]);
 
   return (
     <HomePageContext.Provider
-      value={{ selectedGenre, setSelectedGenre: handleSetSelectedGenre, songs, searchInput, setSearchInput: handleSetSearchInput }}
+      value={{
+        selectedGenre,
+        setSelectedGenre,
+        songs,
+        searchInput,
+        setSearchInput,
+      }}
     >
       {children}
     </HomePageContext.Provider>

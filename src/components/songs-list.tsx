@@ -3,14 +3,9 @@
 import { useHomePageContext } from "@/contexts/HomePageProvider";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
 
 const SongsList = () => {
-  const { setSelectedGenre, songs } = useHomePageContext();
-
-  useEffect(() => {
-    setSelectedGenre(null);
-  }, []);
+  const { songs } = useHomePageContext();
 
   if (!songs?.length) {
     return <p>No songs found!</p>;

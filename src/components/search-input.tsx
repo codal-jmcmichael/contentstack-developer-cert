@@ -1,6 +1,6 @@
 "use client";
 
-import { useHomePageContext } from "@/contexts/HomePageProvider"
+import { useHomePageContext } from "@/contexts/HomePageProvider";
 import { Input } from "./ui/input";
 
 export const SearchInput = () => {
@@ -11,8 +11,9 @@ export const SearchInput = () => {
       type="search"
       placeholder="Search by song or lyrics"
       onChange={(event) => setSearchInput(event?.target?.value)}
+      autoFocus
     />
   );
-}
+};
 
 export default SearchInput;

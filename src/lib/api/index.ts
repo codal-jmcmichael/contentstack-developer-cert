@@ -2,4 +2,4 @@ export { getAlbumByUid, getAlbums } from "./albums";
 export { getArtistByName, getArtists } from "./artists";
 export { getAllGenres } from "./genres";
 export { getPageByUrl } from "./pages";
-export { getSongsByGenre, getSongByName, getSongsByNameOrLyrics } from "./songs";
+export { getSongsByGenre, getSongByName, getSongsByTermsAndGenre } from "./songs";

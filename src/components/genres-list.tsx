@@ -23,7 +23,7 @@ const GenresList = (props: GenresListProps) => {
         <Button
           key="all"
           variant={selectedGenre === null ? "default" : "secondary"}
-          onClick={() => setSelectedGenre(null)}
+          onClick={() => setSelectedGenre("")}
           asChild
         >
           <Badge
