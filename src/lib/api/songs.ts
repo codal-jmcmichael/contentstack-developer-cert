@@ -69,10 +69,9 @@ export const getSongsByTermsAndGenre = async (
   genre: string
 ): Promise<Song[]> => {
   const trimmedInput = input.trim();
-  if (!trimmedInput) return [];
 
   try {
-    const response = await DeliveryClient.contentType("song")
+    const query = DeliveryClient.contentType("song")
       .entry()
       .includeReference("reference_album")
       .includeReference("reference_artist")
@@ -81,13 +80,17 @@ export const getSongsByTermsAndGenre = async (
         "taxonomies.music",
         TaxonomyQueryOperation.EQ_BELOW,
         toSnakeCase(genre || "genre")
-      )
-      .or(
+      );
+
+    if (trimmedInput) {
+      query.or(
         lyricsQuery(trimmedInput),
         nameQuery(trimmedInput),
         artistQuery(trimmedInput)
-      )
-      .find<Song>();
+      );
+    }
+
+    const response = await query.find<Song>();
     return response?.entries ?? [];
   } catch (error) {
     console.error(`Error fetching songs with input: ${input}`);

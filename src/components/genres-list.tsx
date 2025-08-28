@@ -22,12 +22,12 @@ const GenresList = (props: GenresListProps) => {
       <ul className="flex gap-3">
         <Button
           key="all"
-          variant={selectedGenre === null ? "default" : "secondary"}
+          variant={selectedGenre === "" ? "default" : "secondary"}
           onClick={() => setSelectedGenre("")}
           asChild
         >
           <Badge
-            variant={selectedGenre === null ? "default" : "secondary"}
+            variant={selectedGenre === "" ? "default" : "secondary"}
             className="text-lg"
           >
             All
