@@ -9,8 +9,6 @@ import { toSnakeCase } from "../helpers";
 const nameQuery = (name: string) => {
   return DeliveryClient.contentType("song")
     .entry()
-    .includeReference("reference_album")
-    .includeReference("reference_artist")
     .query()
     .where(
       "title",
@@ -22,8 +20,6 @@ const nameQuery = (name: string) => {
 const lyricsQuery = (lyrics: string) => {
   return DeliveryClient.contentType("song")
     .entry()
-    .includeReference("reference_album")
-    .includeReference("reference_artist")
     .query()
     .where(
       "lyrics",
@@ -96,6 +92,8 @@ export const getSongsByNameOrLyrics = async (
   try {
     const response = await DeliveryClient.contentType("song")
       .entry()
+      .includeReference("reference_album")
+      .includeReference("reference_artist")
       .query()
       .or(lyricsQuery(input), nameQuery(input))
       .find<Song>();

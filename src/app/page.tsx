@@ -44,14 +44,8 @@ export default async function Home({
         ) : null}
 
         <SearchInput />
-
-        <div className="flex flex-wrap gap-3">
-          <GenresList genres={genres} />
-        </div>
-
-        <div className="flex flex-wrap items-start gap-3">
-          <SongsList />
-        </div>
+        <GenresList genres={genres} />
+        <SongsList />
       </>
     </HomePageProvider>
   );

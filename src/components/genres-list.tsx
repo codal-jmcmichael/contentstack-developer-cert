@@ -18,7 +18,7 @@ const GenresList = (props: GenresListProps) => {
   }
 
   return (
-    <div>
+    <div className="flex flex-wrap gap-3">
       <ul className="flex gap-3">
         <Button
           key="all"
