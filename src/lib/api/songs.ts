@@ -1,6 +1,9 @@
 import { DeliveryClient } from "@/lib/clients";
 import { Song } from "@/types/contentStack/generated";
-import { QueryOperation, TaxonomyQueryOperation } from "@contentstack/delivery-sdk";
+import {
+  QueryOperation,
+  TaxonomyQueryOperation,
+} from "@contentstack/delivery-sdk";
 import { toSnakeCase } from "../helpers";
 
 /**
@@ -36,15 +39,23 @@ export const getSongByName = async (
  * and its sub-terms
  */
 export const getSongsByGenre = async (
-  genre: string
+  genre: string | null
 ): Promise<Song[] | undefined> => {
+  // If no genre is provided, default to "genre"
+  // which will include all songs in the "genre" taxonomy
+  if (!genre) genre = "genre";
+
   try {
     const response = await DeliveryClient.contentType("song")
       .entry()
       .includeReference("reference_album")
       .includeReference("reference_artist")
       .query()
-      .where("taxonomies.music", TaxonomyQueryOperation.EQ_BELOW, toSnakeCase(genre))
+      .where(
+        "taxonomies.music",
+        TaxonomyQueryOperation.EQ_BELOW,
+        toSnakeCase(genre)
+      )
       .find<Song>();
     return response?.entries ?? [];
   } catch (error) {
@@ -52,4 +63,3 @@ export const getSongsByGenre = async (
     return [];
   }
 };
-

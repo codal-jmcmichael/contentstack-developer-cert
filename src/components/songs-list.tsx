@@ -1,31 +1,26 @@
 "use client";
 
 import { useHomePageContext } from "@/contexts/HomePageProvider";
-import {
-  isSongWithReferenceData,
-  SongWithReferenceData,
-} from "@/lib/helpers";
-import { Song } from "@/types/contentStack/generated";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 
 const SongsList = () => {
-  const { songs } = useHomePageContext();
+  const { setSelectedGenre, songs } = useHomePageContext();
 
   useEffect(() => {
-    console.log(songs);
-  }, [songs]);
+    setSelectedGenre(null);
+  }, []);
 
   if (!songs?.length) {
-    return <p>No songs found!</p>
+    return <p>No songs found!</p>;
   }
 
   return (
     <ul className="flex flex-col gap-3">
-      {songs.map((song, index) => {
+      {songs.map((song: any) => {
         return (
-          <li key={`${song.title}-${index}`} className="flex items-center gap-4">
+          <li key={song.uid} className="flex items-center gap-4">
             {song.reference_album?.[0]?.cover_art?.url && (
               <Image
                 src={`${song.reference_album?.[0]?.cover_art?.url}?width=200&height=200`}
@@ -47,11 +42,16 @@ const SongsList = () => {
               )}
 
               {song.reference_artist?.[0]?.title ? (
-                <Link className="text-sm hover:underline" href={song.reference_artist?.[0]?.url}>
+                <Link
+                  className="text-sm hover:underline"
+                  href={song.reference_artist?.[0]?.url}
+                >
                   {song.reference_artist?.[0]?.title}
                 </Link>
               ) : (
-                <span className="text-sm">{song.reference_artist?.[0]?.title}</span>
+                <span className="text-sm">
+                  {song.reference_artist?.[0]?.title}
+                </span>
               )}
             </div>
           </li>

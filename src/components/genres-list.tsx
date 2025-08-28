@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useHomePageContext } from "@/contexts/HomePageProvider";
 import { Term } from "@contentstack/management/types/stack/taxonomy/terms";
-import { useEffect } from "react";
 
 interface GenresListProps {
   genres: Term[];
@@ -21,22 +20,21 @@ const GenresList = (props: GenresListProps) => {
   return (
     <div>
       <ul className="flex gap-3">
-        {genres?.length &&
-          <Button
-            key="all"
+        <Button
+          key="all"
+          variant={selectedGenre === null ? "default" : "secondary"}
+          onClick={() => setSelectedGenre(null)}
+          asChild
+        >
+          <Badge
             variant={selectedGenre === null ? "default" : "secondary"}
-            onClick={() => setSelectedGenre(null)}
-            asChild
+            className="text-lg"
           >
-            <Badge
-              variant={selectedGenre === null ? "default" : "secondary"}
-              className="text-lg"
-            >
-              All
-            </Badge>
-          </Button>}
+            All
+          </Badge>
+        </Button>
 
-        {genres?.map((genre) => (
+        {genres.map((genre) => (
           <Button
             key={genre.uid}
             variant={selectedGenre === genre.name ? "default" : "secondary"}

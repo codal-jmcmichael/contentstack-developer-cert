@@ -2,7 +2,7 @@
 
 import { getSongsByGenre } from "@/lib/api";
 import { Song } from "@/types/contentStack/generated";
-import React, { createContext, useContext, useState, ReactNode, SetStateAction } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface HomePageContextProps {
   songs: Song[] | null;
@@ -21,10 +21,8 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   >(null);
 
   const handleSetSelectedGenre = async (genre: string | null) => {
-    const g = genre || "genre";
-
-    setSelectedGenre(g);
-    setSongs(await getSongsByGenre(g) || []);
+    setSelectedGenre(genre);
+    setSongs((await getSongsByGenre(genre || null)) || []);
   };
 
   return (

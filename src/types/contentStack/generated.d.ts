@@ -150,6 +150,7 @@ export interface Song extends SystemFields {
   lyrics?: string;
   reference_artist?: (Artist | ReferencedEntry)[];
   reference_album?: (Album | ReferencedEntry)[];
+  taxonomies?: Taxonomy | TaxonomyEntry[];
   $?: {
     title?: CSLPFieldMapping;
     url?: CSLPFieldMapping;
@@ -157,6 +158,7 @@ export interface Song extends SystemFields {
     lyrics?: CSLPFieldMapping;
     reference_artist?: CSLPFieldMapping;
     reference_album?: CSLPFieldMapping;
+    taxonomies?: CSLPFieldMapping;
   };
 }
 
