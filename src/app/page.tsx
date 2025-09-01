@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 
-import { GenresList, SongsList, SearchInput } from "@/components";
+import { GenresList, SongsList, SearchInput, Pagination } from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
 import { getAllGenres, getPageByUrl } from "@/lib/api";
 import { DeliveryClient } from "@/lib/clients";
@@ -24,8 +24,7 @@ export default async function Home({
   }
 
   const page = await getPageByUrl("/");
-
-  const genres = await getAllGenres() || [];
+  const genres = (await getAllGenres()) || [];
 
   if (!genres) {
     return <div>Error loading data</div>;
@@ -46,6 +45,7 @@ export default async function Home({
         <SearchInput />
         <GenresList genres={genres} />
         <SongsList />
+        <Pagination limit={3} />
       </>
     </HomePageProvider>
   );

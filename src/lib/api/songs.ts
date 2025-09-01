@@ -66,7 +66,8 @@ export const getSongByName = async (
  */
 export const getSongsByTermsAndGenre = async (
   input: string,
-  genre: string
+  genre: string,
+  page?: number
 ): Promise<Song[]> => {
   const trimmedInput = input.trim();
 
@@ -76,6 +77,10 @@ export const getSongsByTermsAndGenre = async (
       .includeReference("reference_album")
       .includeReference("reference_artist")
       .query()
+      .paginate({
+        skip: page && page > 1 ? (page - 1) * 3 : 0,
+        limit: 3,
+      })
       .where(
         "taxonomies.music",
         TaxonomyQueryOperation.EQ_BELOW,

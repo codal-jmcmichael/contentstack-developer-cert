@@ -14,8 +14,10 @@ interface HomePageContextProps {
   songs: Song[];
   searchInput: string;
   selectedGenre: string;
+  pagination: number;
   setSearchInput: (input: string) => void;
   setSelectedGenre: (genre: string) => void;
+  setPagination: (page: number) => void;
 }
 
 const HomePageContext = createContext<HomePageContextProps | undefined>(
@@ -26,27 +28,31 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
+  const [pagination, setPagination] = useState<number>(1);
 
   useEffect(() => {
     const fetchSongs = async () => {
       const fetchedSongs = await getSongsByTermsAndGenre(
         searchInput,
-        selectedGenre
+        selectedGenre,
+        pagination
       );
       setSongs(fetchedSongs);
     };
 
     fetchSongs();
-  }, [searchInput, selectedGenre]);
+  }, [searchInput, selectedGenre, pagination]);
 
   return (
     <HomePageContext.Provider
       value={{
         selectedGenre,
-        setSelectedGenre,
         songs,
         searchInput,
+        pagination,
+        setSelectedGenre,
         setSearchInput,
+        setPagination,
       }}
     >
       {children}
