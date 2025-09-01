@@ -1,6 +1,13 @@
 import { headers } from "next/headers";
 
-import { GenresList, SongsList, SearchInput, Pagination } from "@/components";
+import {
+  GenresList,
+  SongsList,
+  SearchInput,
+  Pagination,
+  Sorting,
+  PAGINATION_LIMIT,
+} from "@/components";
 import { HomePageProvider } from "@/contexts/HomePageProvider";
 import { getAllGenres, getPageByUrl } from "@/lib/api";
 import { DeliveryClient } from "@/lib/clients";
@@ -44,8 +51,9 @@ export default async function Home({
 
         <SearchInput />
         <GenresList genres={genres} />
+        <Sorting />
         <SongsList />
-        <Pagination limit={3} />
+        <Pagination limit={PAGINATION_LIMIT} />
       </>
     </HomePageProvider>
   );

@@ -30,7 +30,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col items-start justify-start gap-8 bg-slate-950 text-slate-50 antialiased`}
         >
-          <main className="max-h-1/2 max-w-1/2 flex flex-col items-start justify-start gap-8 m-auto">
+          <main className="max-w-1/2 flex flex-col items-start justify-start gap-8 m-auto">
             {children}
           </main>
         </body>

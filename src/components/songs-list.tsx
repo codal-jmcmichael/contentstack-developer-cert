@@ -49,6 +49,12 @@ const SongsList = () => {
                     {song.reference_artist?.[0]?.title}
                   </span>
                 )}
+
+                {song.reference_album?.[0]?.release_date ? (
+                  <p className="text-sm">
+                    {song.reference_album?.[0]?.release_date}
+                  </p>
+                ) : null}
               </div>
             </li>
           );

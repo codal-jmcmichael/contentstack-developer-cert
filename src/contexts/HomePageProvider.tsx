@@ -1,6 +1,6 @@
 "use client";
 
-import { getSongsByTermsAndGenre } from "@/lib/api";
+import { getSongsByTermsAndGenre, SORT_OPTIONS, SortOptions } from "@/lib/api";
 import { Song } from "@/types/contentStack/generated";
 import React, {
   createContext,
@@ -15,9 +15,11 @@ interface HomePageContextProps {
   searchInput: string;
   selectedGenre: string;
   pagination: number;
+  sorting: SortOptions;
   setSearchInput: (input: string) => void;
   setSelectedGenre: (genre: string) => void;
   setPagination: (page: number) => void;
+  setSorting: (sorting: SortOptions) => void;
 }
 
 const HomePageContext = createContext<HomePageContextProps | undefined>(
@@ -29,19 +31,22 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGenre, setSelectedGenre] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
   const [pagination, setPagination] = useState<number>(1);
+  const [sorting, setSorting] = useState<SortOptions>(SORT_OPTIONS.TITLE);
 
   useEffect(() => {
     const fetchSongs = async () => {
       const fetchedSongs = await getSongsByTermsAndGenre(
         searchInput,
         selectedGenre,
-        pagination
+        pagination,
+        sorting
       );
+
       setSongs(fetchedSongs);
     };
 
     fetchSongs();
-  }, [searchInput, selectedGenre, pagination]);
+  }, [searchInput, selectedGenre, pagination, sorting]);
 
   return (
     <HomePageContext.Provider
@@ -50,9 +55,11 @@ export const HomePageProvider = ({ children }: { children: ReactNode }) => {
         songs,
         searchInput,
         pagination,
+        sorting,
         setSelectedGenre,
         setSearchInput,
         setPagination,
+        setSorting,
       }}
     >
       {children}
